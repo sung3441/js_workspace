@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>복합 구조의 레이아웃</title>
+  <style>
+  body{
+    margin: 0px;
+  }
+
+  #navi{
+    background-color: yellow;
+    width: 700px;
+    height: 100px;
+  } 
+  #side{
+    background-color: greenyellow;
+    width: 100px;
+    height: 550px;
+    display: inline-block;
+  }
+    #content{
+    background-color: blue;
+    width: 600px;
+    height: 550px;
+    display: inline-block;
+  }
+  
+</style>
+</head>
+<body>
+  <!-- 모든 태그는 박스모델로 간주되며
+  속성은 크게 block이나 inline 속성을 갖는다.
+  block : 나와 같은 수평공간에 다른 어떤 것도 허용하지 않는다.
+  inline :다른 태그 요소들과 수평공간에 공존할 수 있다. -->
+    
+  <!-- <span id="s">난 span</span>
+  <span id="s2">나도 span</span>
+  <div id="box">난 div</div> -->
+  
+  <div id="navi">노란색 박스</div>
+  <div id="side">사이드</div>
+  <div id="content">콘텐츠</span>
+</body>
+</html>
