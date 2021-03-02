@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>study</title>
+    <style>
+        .top-navi a{
+            /* 링크 밑줄 없애기 */
+            text-decoration: none;
+            font-size: 18px;
+            /*  */
+            padding-left: 16px;
+            padding-right: 16px;
+            border: 1px solid #000000;
+            float: left;
+        }
+        .wrapper{
+            background-color: red;
+            width: 600px;
+            height: 600px;
+            margin: auto;
+        }
+
+        #top-div{
+            background-color: yellow;
+            width: 100%;
+            height: 100px;
+        }
+
+        #side-div{
+            background-color: blue;
+            float: left;
+            width: 100px;
+            height: 400px;
+        }
+        #content-div{
+            background-color: greenyellow;
+            width: 500px;
+            height: 400px;
+            float: left;
+        }
+
+        #footer-div{
+            background-color: #CCCCCC;
+            width: 100%;
+            height: 100px;
+            clear: both;
+        }
+        .top-navi{
+            /* 자식들이 float처리가 된 경우 부모에는 
+            반드시 overflow:hidden속성을 지정한다. */
+            overflow: hidden;
+        }
+        #cs{
+            float: right;
+        }
+
+        /* a태그에 마우스를 올렸을 때 배경색 주기
+        : 뒤에오는 hover는 태그가 아니다 : 유사 태그(pseudo)*/
+        .top-navi a:hover{
+            background-color: #4caf50;
+
+        }
+    </style>
+</head>
+<body>
+    <!-- 모든 div를 감쌀 최상위 부모 컨테이너 -->
+    <div class="wrapper">
+    <div id="top-div">
+        <div class="top-navi">
+            <a href="#">Home</a> 
+            <a href="#">shopping</a>
+            <a href="#">Mypage</a>
+            <div id="cs">
+                <a href="#" id="cs">CS</a>
+           </div>
+        </div>
+    </div>
+    <div id="side-div">side</div>
+    <div id="content-div">content</div>
+    <div id="footer-div">foot</div>
+</div>
+</body>
+</html>

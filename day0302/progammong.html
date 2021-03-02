@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0px;
+        }
+
+        #wrapper{
+            width: 100%;
+            height: 500px;
+            background: url(../image/bg_city.jpg);
+            background-repeat: repeat-x;   /*x축으로만 반복*/
+            background-size: 100% 500px;
+            background-position: 0px 0px;
+        }
+
+        #ironman{
+            position: absolute; /*부모 태그를 기준으로 한 위치 속성 현재는 wrapper를 기준*/
+            width: 100px;
+            left: 50px;
+            top: 200px;
+        }
+
+    </style>
+    <script>
+        /*프로그램 영역-아래의 코드를 무조건 실행을 막기 위해 블럭을 지정한 후, 
+        코드 영역에 이름을 붙인다. 아래의 코드 블럭 이름은 moveBg이고, 개발자가 그 이름을
+        호출하기 전까지 실행되지 않는다. 즉, 불러야 일을 한다.
+        */
+        var x=0; //js에서는 변수 선언 시 var라는 키워드를 사용한다.(variable=변수)
+        var herotop=200;
+
+        function moveBg(){
+            x=x-0.3; //기존 x에 -10을 누적해서 다시 x 에 대입
+            console.log("변수 x값은", x);
+            // alert('나 불렀어?');
+            //문서 내의 wrapper라 불리는 요소의 배경을 x축의 음수방향으로 이동시키자.
+            document.querySelector("#wrapper").style.backgroundPosition=x+"px 0px";
+              
+        }
+        //자동으로 moveBg를 호출해주는 기능
+        
+        function gameLoop( ){
+            //   1/1000 초로 표현 가능
+            setInterval("moveBg()", 0.5);
+        }
+        
+        //우측으로 이동
+        function moveUp(){
+            herotop=herotop-1;
+            document.querySelector("#ironman").style.top=herotop+"px";
+        }
+        //아래로 이동
+        function moveDown(){
+            herotop=herotop+1;
+            document.querySelector("#ironman").style.top=herotop+"px";
+        }
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <img id="ironman" src="../image/ironmanFly.png" alt="">
+    </div> 
+     <!--이벤트 핸들러란? 해당 이벤트가 발생했을 때 어떤
+    자바스크립트 코드를 작성할지 결정할 수 있는 핸들러  -->
+    <button onClick="moveBg()">배경 수동으로 움직이기</button>
+    <button onClick="gameLoop()">배경 자동으로 움직이기</button>
+    <button onClick="moveUp()">위로 이동</button>
+    <button onClick="moveDown()">아래로 이동</button>
+</body>
+</html>

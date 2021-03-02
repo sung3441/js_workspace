@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* 
+        css의 위치 속성은 여러가지가 있지만 가장 중요한 속성이 relative, absoulute
+        가 있다.  */
+        #box{
+            position: relative;
+            width: 700px;
+            height: 450px;
+            background: url(../image/coding.jpg);
+            background-size: cover;
+            margin: auto;
+        }
+        /* position을 지정할 때 가장 주의해야 할 것!!
+            자식 요소에 포지션을 지정하면, 반드시 부모도 포지션을 명시해야한다.
+         */
+        #left-top{
+            /* 부모 태그를 기준으로 한 위치 속성 */
+            position: absolute;
+            left: 50px;
+            top: 50px;
+            color: white;
+        }
+        
+        #rigth-top{
+            position: absolute;
+            right: 50px;
+            top: 50px;
+            color: white;
+        }
+
+        #left-bottom{
+            position: absolute;
+            left: 50px;
+            bottom: 50px;
+            color: white;
+        }
+
+        #rigth-bottom {
+            position: absolute;
+            bottom: 50px;
+            right: 50px;
+            color: white;
+        }
+        #center-div{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            color: white;
+            transform: translate(-50%, -50%);
+        }
+
+    </style>
+</head>
+<body>
+    <div id="box">
+        <div id="left-top">left-top</div>
+        <div id="rigth-top">rigth-top</div>
+        <div id="left-bottom">left-bottom</div>
+        <div id="rigth-bottom">rigth-bottom</div>
+        <div id="center-div">center</div>
+    </div>
+</body>
+</html>
