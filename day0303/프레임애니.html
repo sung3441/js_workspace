@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>움직이는 애니메이션</title>
+<style>
+
+</style>
+<script>
+    var x=0;
+    function next(){
+        //에니메이션 효과를 내기 위해서는 이미지를 교체..
+        x=x+1;
+        //18번 이미지가 넘어가면 다시 1번 이미지부터 출력
+        if(x>18)  x=1;
+        document.querySelector("#hero").src="../day0303/img/hero/image"+x+".png";
+    }
+</script>
+</head>
+<body>
+    <button id="move" onclick="next()">애니메이션 동작</button>
+    <img id="hero" src="../day0303/img/hero/image1.png" alt="">
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    #harden{
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        border: 5px dotted red;
+    }
+    
+    #wrapper{
+        width: 320px;
+        height: 320px;
+        margin: auto;
+        text-align: center;
+    }
+    </style>
+    <script>
+        var r=0;
+
+        function rotate(){
+            r+=5;
+            document.querySelector("#harden").style.transform="rotate("+r+"deg)";
+        }
+        
+        function rotateOp( ){
+            r-=5;
+            document.querySelector("#harden").style.transform="rotate("+r+"deg)";
+        }
+
+        function rotateAuto(){
+            setInterval("rotate()",1);
+        }
+        
+        function rotateOpAuto(){
+            setInterval("rotateOp()",1);
+        }
+
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <img id="harden" src="../image/hardenFace.jpg" alt="">
+        <p>
+            <button id="rotate" onclick="rotate()">정방향 회전</button>
+            <button id="rotateOp" onclick="rotateOp()">반시계 회전</button>
+            <br>
+            <button id="rotateOp" onclick="rotateAuto()">정방향 자동</button>
+            <button id="rotateOp" onclick="rotateOpAuto()">반시계 자동</button>
+    </div>
+</body>
+</html>

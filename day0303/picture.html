@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width: 600px;
+            height: 450px;
+            margin: auto;
+
+        }
+
+        #wrapper img{
+           width: 100%;
+           height: 400px;
+           object-fit: cover;
+
+        }
+        
+        #consol{
+            position: relative; /*자식에게 포지션이 명시되면 부모도 명시 되어야 함!*/
+            width: 100%;
+        }
+
+        #consol img{
+            width: 50px;
+            height: 50px;
+            background-color: gray;
+        }
+
+        .rightBt{
+            position: absolute;
+            right: 0px;
+        }
+
+        .leftBt{
+            position: absolute;
+            left: 0px;
+        }
+
+    </style>
+    <script>
+        var i=1;
+        function moveLeft() {
+            i-=1;
+            if(i==0) i=5;
+            document.querySelector("#img").src="../image/nba"+i+".jpg"
+        }
+
+        function moveRigth(){
+            i+=1;
+            if(i==6) i=1;
+            document.querySelector("#img").src="../image/nba"+i+".jpg"
+        }
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <img id="img" src="../image/nba1.jpg">
+        <br>
+        <div id="consol">
+            <img class="leftBt" src="../image/left.png" onclick="moveLeft()">
+            <img class="rightBt"src="../image/right.png" onclick="moveRigth()">
+        </div>
+    </div>
+    </body>
+</html>

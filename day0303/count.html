@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>count</title>
+    <style>
+        #showBox{
+            width: 700px;
+            height: 700px;
+            font-size: 200px;
+            background-color: dodgerblue;
+            color: floralwhite;
+            text-align: center;
+        }
+    </style>
+    <script>
+        var num=0;
+            function count( ){
+                num+=1;
+                document.querySelector("#showBox").value=num;
+            }
+
+            function autoCount(){
+                setInterval("count()", 100);
+            }
+    </script>
+</head>
+
+<body>
+    <button onclick="count()">숫자 증가</button>
+    <button onclick="autoCount();this.disabled=true">자동 증가</button>
+    <br>
+    <input id="showBox" type="text" value="0">
+</body>
+</html>
