@@ -30,7 +30,8 @@
             height: 50px;
             background-color: gray;
         }
-
+        /*포지션 앱솔루트를 이용하면 기준이 부모의 테두리가 된다.
+        즉, rightBt의 부모는 consol이므로 consol의 오른쪽 벽에서 0px만큼 떨어진다는 뜻이 된다.*/
         .rightBt{
             position: absolute;
             right: 0px;
@@ -43,10 +44,13 @@
 
     </style>
     <script>
+        //변수를 이용해서 이미지를 변경할 예정
         var i=1;
         function moveLeft() {
             i-=1;
+            //사진이 5번까지 있어서 제한을 뒀다.
             if(i==0) i=5;
+            //문서내의 #img안에 있는 src를 변경한다.
             document.querySelector("#img").src="../image/nba"+i+".jpg"
         }
 

@@ -18,7 +18,7 @@
     #wrapper img{
         position: absolute;
         width: 40px;
-        right: 80px;
+        right: 20px;
         top: 350px;
     }
 
@@ -26,21 +26,25 @@
         width: 100%;
         height: 100%;
         background-color: black;
-        opacity: 0.8; /*색의 투명도를 결정할 수 있다.*/
+        opacity: 0; /*색의 투명도를 결정할 수 있다.*/
     }
     
 </style>
 <script>
+    //스위치를 off, on 전환하기 위한 변수
     var onOff="off";
-    var light=0.8;
-    var flag=true;
+    //배경의 투명도를 설정해서 
+    var light=0;
+    var flag=false;
     
     function turn(){
         //삼항 연산자를 이용해서 변수의 값을 바꿔줬다.
+        //0=불켜기, 0.8 불끄기
         light=(flag)? 0:0.8 ;
         onOff=(flag)?"on":"off";
-        document.querySelector("#wrapper img").src="../image/switch_"+onOff+".png";
         document.querySelector("#surface").style.opacity=light;
+        document.querySelector("#wrapper img").src="../image/switch_"+onOff+".png";
+        //스위치 역할을 한다. 함수가 종료되기 전에 값을 반대로 바꿔준다.
         flag=!flag;
     }
 
@@ -50,7 +54,7 @@
 <body>
     <div id="wrapper">
         <div id="surface"></div>
-            <img src="../image/switch_off.png" onclick="turn()">
+            <img src="../image/switch_on.png" onclick="turn()">
     </div>
 </body>
 </html>
