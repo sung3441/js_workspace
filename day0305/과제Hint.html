@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<style>
+    #wrapper{
+        position: relative;
+        width: 700px;
+        height: 500px;
+        margin: auto;
+        background: url(../image/bg_city.jpg);
+    }
+
+    #hero{
+        /*부모인 wrapper를 기준으로 위치설정*/
+        position: absolute;
+        left: 0px;
+        top: 200px;
+    }
+    /*히어로 머리 위에 떠있는 거리표시*/
+    #show{
+        position: absolute;
+        left: 0;
+        top: 100px;
+    }
+    
+    /*수동 버튼 스타일*/
+    #move{
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+    }
+    
+    #autoMove{
+        position: absolute;
+        bottom: 10px;
+        left: 70px;
+    }
+
+</style>
+<script>
+    var x=1;
+    var flag=true;
+    var img;
+    //문서 내의 hero 요소의 left값을 변경
+    function move(){
+        //flag는 500 과 0을 만나면 반대로 뒤집힌다.
+        flag=(x%500==0||x==0)? !flag : flag;
+        //시작과 끝 이미지 다르게 하기
+        
+        //삼항연산자를 이용하여 flag가 true일 때는 x값 증가 false일 때는 x값 감소
+        (flag)? x+=1:x-=1;
+        //영웅이 날라가는 방향에 따라 모습을 변하게 하기 위함..
+        img=(flag)? "../image/ironmanFly.png":"../image/ironmanFly_back.png";
+        document.querySelector("#wrapper img").src=img;
+        //x좌표의 변하는 값을 실시간으로 보여주기 innerText는 태그 사이에 문자를 말함.
+        document.querySelector("#show").innerText="x값 :"+x;
+        //x좌표를 보여주는 문자가 영웅 머리를 따라다니는 효과
+        document.querySelector("#show").style.left=x+"px";
+        //영웅 좌우로 움직이기
+        document.querySelector("#hero").style.left=x+"px";
+    }
+ 
+    //자동 반복
+    function autoMove(){
+        setInterval("move()", 10);
+    }
+
+</script>
+</head>
+<body>
+    <div id="wrapper">
+        <img src="../image/ironmanFly.png" width="100px" id="hero">
+        <h1 id="show">x값 :50</h1>
+        <button onclick="move()" id="move">move</button>
+        <button onclick="autoMove()" id="autoMove">auto</button>
+    </div>
+</body>
+</html>
+도대체  clearInterval은 어떻게 사용하는건지 모르겠습니다...

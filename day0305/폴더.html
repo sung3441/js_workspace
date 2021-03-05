@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+    </style>
+    <script>
+        var sw=true;
+        var openClose;
+        function onOff(){
+            openClose=(sw)?  "on" : "off";
+            document.querySelector("#folder").src="../image/folder_"+openClose+".webp";
+            console.log("현재 sw=", sw, "현재 onOff", openClose);
+            sw=!sw
+        }
+
+    </script>
+</head>
+<body>
+        <img id="folder" src="../image/folder_off.webp" onclick="onOff()">
+</body>
+</html>

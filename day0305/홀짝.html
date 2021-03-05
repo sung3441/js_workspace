@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<style>
+
+
+</style>
+<script>
+    //innerText는 태그 사이에 있는 텍스트를 의미한다.
+    function chg(){
+        var number=prompt("원하시는 수를 입력하세요.");
+        var check=isNaN(number);
+        var showText=(number%2==1)? "홀수": (number==0)? "0": "짝수" ;
+        alert(showText+"입니다.")
+    }
+
+</script>
+</head>
+<body>
+    <h1>
+        <button onclick="chg()">홀짝</button>
+    </h1>
+</body>
+</html>
