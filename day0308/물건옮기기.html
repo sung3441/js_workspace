@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width: 100%;
+            height: 800px;
+            background: yellow;
+            position: relative;
+        }
+
+        body{margin: 0px;}
+    </style>
+
+    <script>
+        var x=0;
+        var y=50;
+        var img;
+        var flag=false;
+
+        function init(){
+            img=document.createElement("img");
+            img.src="../image/ball.webp";
+            img.style.position="absolute";
+            img.style.left=x+"px";
+            img.style.top=y+"px";
+            img.style.width=100+"px";
+            img.style.height=100+"px";
+
+            
+            //기존의 tag에 디자인적으로 부여했던, onClick 이벤트 핸들러를, 
+            //자바스크립트 코드로 구현할 경우 다음과 같다.
+            img.addEventListener("click", function(){
+                flag=!flag;
+            });
+            
+            var wrapper=document.getElementById("wrapper");
+            wrapper.appendChild(img);
+        }
+        
+        function getPos(){
+            console.log("마우스 움직이기");  
+            //마우스의 좌표 구하기
+            x= event.clientX;
+            y= event.clientY;
+            document.getElementById("x-pos").innerText=x;
+            document.getElementById("y-pos").innerText=y;
+
+            //공의 테두리로 사용자가 집어야할지 말지를 알 수 있게
+            img.style.border="2px solid red"
+            
+            //조건문을 부여해서 flag가 true이면, 공이 마우스를 따라다닌다.
+            if(flag){
+                img.style.left=(x-50)+"px";
+                img.style.top=(y-50)+"px";
+                img.style.border="0px";
+            }
+        }
+    
+    </script>
+</head>
+<body onMouseMove="getPos()" onload="init()">
+    <div id="wrapper">
+        <span style="font-size: 30px;" id="x-pos">x축</span>px
+        <span style="font-size: 30px;" id="y-pos">y축</span>px
+    </div>
+</body>
+</html>

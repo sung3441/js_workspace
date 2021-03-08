@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            margin: auto;
+            width: 1050px;
+            height: 650px;
+            background: url("../image/bg.jpg");
+            background-size: 1200px 650px;
+            background-repeat: repeat-x;
+            position: relative;
+            overflow: hidden;
+        }
+        
+    </style>
+    <script>
+        var img;
+        //정수형으로 선언할 때 초기 값을 선언해줘야 한다.
+        var x=0;
+        var y=230;
+        var container; //div는 논리 값이 아닌 객체형이다.
+        var bg=0;
+        //숫자값을 초기화 시켜주지 않으면 언디파인드 값이 들어가서 연산을 할 수 없다.
+      
+        //전역 변수로 선언하면 프로그램이 종료될 때 까지 그 값을 사용할 수 있다.
+        function init(){
+         //우주선을 디자인적으로 생성시키지 말고, 프로그래밍 적으로 생성
+        img=document.createElement("img");//기존에 없었던 요소를 생성할 때
+        img.src="../image/ironmanFly.png";
+        //스크립트 안에서 id부여하는법
+        img.id="hero";
+        img.style.width=100+"px";
+        img.style.height=100+"px";
+        img.style.position="absolute";
+        img.style.left=x+"px";
+        img.style.top=y+"px";
+        //생성할 떄
+        container=document.getElementById("wrapper");
+        container.appendChild(img);
+        }
+
+        function joystick(){
+            console.log("당신이 누른 철자의 아스키코드", event.keyCode);
+            //좌측이동
+             if(event.keyCode==37){
+                x-=10;
+            //위쪽 이동
+            }else if(event.keyCode==38){
+                y-=10;
+            //우측이동
+            }else if(event.keyCode==39){
+                x+=10;
+            //아래 이동
+            }else if(event.keyCode==40){
+                y+=10;
+            }
+            //우주선을 x축 방향으로 증가(우측 이동 효과) 39
+            img.style.left=x+"px";
+            img.style.top=y+"px";
+            //우주선을 x축 방향으로 감소(좌측 이동 효과) 37
+            //우주선을 y축 방향으로 증가(아래쪽 이동 효과) 40
+            //우주선을 y축 방향으로 감소(윗쪽 이동 효과) 38
+        }
+
+        function moveBg(){
+            bg--;
+            container.style.backgroundPosition=bg+"px 0px"; //x축 y축
+            setTimeout("moveBg(), 1000");//지정한 함수를 지정한 시간 뒤에 호출
+        }
+
+
+        //wrapper에 이미지를 자식 요소로 부착
+    </script>
+</head>
+<!-- 문서의 내용이 다 읽혀졌을 떄 호출되는 onLoad 이벤트 핸들러를 이용하는 방법 -->
+<body onload="init(); moveBg();" onkeydown="joystick()">
+    <div id="wrapper"></div>
+</body>
+</html>
+<script>
+    //옵션 1) 스크립트 자체를 문서 제일 아래 두는 방법
+    //init(); //기존 함수 호출
+</script>
