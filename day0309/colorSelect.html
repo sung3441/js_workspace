@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    </style>
+    <script>
+        var choice;
+        var cr;
+        var bt;
+        var selectBt;
+        //이벤트 핸들러를 자바스크립트에서 구현하기
+        //onload=>load 이처럼 이벤트 명만 넣는다.
+        //익명 함수들 중 시스템에 의해 호출 당하는
+        //함수를 callback함수라고 한다. 즉  load가 실행될 때
+        //함수를 호출한다.
+        window.addEventListener("load", function(){
+            
+            choice=prompt("원하시는 배경색을 선택하세요.\n1.red\n2.orange\n3.yellow\n4.green\n5.blue\n6.navy\n7.purple");
+            if(choice==1){
+                cr="red";
+            }else if(choice==2){
+                cr="orange";
+            }else if(choice==3){
+                cr="yellow";
+            }else if(choice==4){
+                cr="green";
+            }else if(choice==5){
+                cr="blue";
+            }else if(choice==6){
+                cr="navy";
+            }else if(choice==7){
+                cr="purple";
+            }else{
+                cr="black";
+                alert("범위를 벗어났습니다.[1~7 숫자만 입력]");
+            }
+            document.body.style.background=cr;
+
+            bt=document.createElement("button");
+            selectBt=document.createTextNode("Change Color");
+            bt.id="bt";
+    
+            bt.appendChild(selectBt);
+            document.body.appendChild(bt);
+
+            bt.addEventListener("click", function(){
+                colorCh();
+            });
+        });
+
+        function colorCh(){
+            choice=prompt("원하시는 배경색을 선택하세요.\n1.red\n2.orange\n3.yellow\n4.green\n5.blue\n6.navy\n7.purple");
+            if(choice==1){
+                cr="red";
+            }else if(choice==2){
+                cr="orange";
+            }else if(choice==3){
+                cr="yellow";
+            }else if(choice==4){
+                cr="green";
+            }else if(choice==5){
+                cr="blue";
+            }else if(choice==6){
+                cr="navy";
+            }else if(choice==7){
+                cr="purple";
+            }else{
+                cr="black";
+                alert("유효하지 않은 값입니다.[1~7사이 숫자 입력]");
+            }
+            document.body.style.background=cr;
+        }
+
+    </script>
+</head>
+<body>
+</body>
+</html>

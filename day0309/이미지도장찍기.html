@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .wrapper{
+            width: 700px;
+            height: 600px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content{
+            width: 600px;
+            height: 100%;
+            background-color: green;
+            float: left;
+            position: relative;
+            
+
+        }
+        .menu{
+            width: 100px;
+            height: 100%;
+            background-color:yellow;
+            float: left;
+        }
+
+
+        .menu img{
+            width: 80px;
+            height: 100px;
+            border: 5px solid red;
+        }
+
+        body{
+            margin: 0px;
+        }
+    </style>
+    <script>
+        var img;
+        var x;
+        var y;
+        var content;
+        function init(){
+            alert("Start");
+            
+        }
+        
+        function createStamp(number){
+            //자연스럽게 카드가 마우스를 따라가기 위해 현재 마우스 위치에 카드생성
+            x=event.clientX;
+            y=event.clientY;
+            //카드를 클릭했을 최초 1번만 이미지를 생성
+            img=document.createElement("img");
+            //매개변수를 받아서 이미지의 주소를 변경해줌
+            img.src="../image/card"+number+".png";
+            //이미지의 크기설정
+            img.style.width=70+"px";
+            img.style.height=100+"px";
+            //마우스가 이미지의 가운데 가게 위치 조정
+            img.style.left=(x-35)+"px";
+            img.style.top=(y-50)+"px";
+            //이미지가 자유롭게 돌아다녀야 하기 때문에 절대위치
+            img.style.position="absolute";
+            content=document.querySelector(".content");
+            content.appendChild(img);
+        }
+
+        function moveMouse(){
+            //맨 처음 홈페이지를 키면 이미지는 undefined상태이기 때문에 조건문으로 오류 방지
+            //즉, 이미지에 값이 들어있을 때만 작동
+            if(img!=undefined){
+                //현재 마우스의 위치를 실시간 x, y에 대입
+                x=event.clientX;
+                y=event.clientY;
+                img.style.left=(x-35)+"px";
+                img.style.top=(y-50)+"px";
+            }
+        }
+
+        function stamp(){
+            //기존의 이미지는 현재 마우스 위치에 두고, 새로운 이미지를 만든다.
+            document.createElement("img");
+            //이미지가 undefined이 아닐 때만 moveMouse함수가 동작하므로, 다음 이미지를 집기 전까지
+            //img는 undefined 상태로 유지한다.
+            img=undefined;
+        }
+
+    </script>
+</head>
+<body onload="init()">
+    <div class="wrapper">
+        <div class="content" onmousemove="moveMouse()" onclick="stamp()"></div>
+        <div class="menu">
+            <span id="x">x</span>
+            <span id="y">y</span>
+            <img src="../image/card1.png" alt="" onclick="createStamp(1)">
+            <img src="../image/card2.png" alt="" onclick="createStamp(2)">
+            <img src="../image/card3.png" alt="" onclick="createStamp(3)">
+            <img src="../image/card4.png" alt="" onclick="createStamp(4)">
+            <img src="../image/card5.png" alt="" onclick="createStamp(5)">
+        </div>
+    </div>
+</body>
+</html>
+<!-- 질문 사항 : 분명 content 안에 onclick 효과를 줬는데 어째서 menu영역을 클릭해도 stamp효과가 적용되는지..? -->

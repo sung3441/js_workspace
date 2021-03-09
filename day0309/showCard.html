@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        var cnt=1;
+        var div;
+       window.addEventListener("load", function(){
+            init();
+            
+        });
+        
+        
+        function init(){
+            var cnt=0;
+            var bt=document.createElement("button"); //버튼 생성
+            var bt2=document.createElement("button"); //버튼 생성
+            var bt3=document.createElement("button"); //버튼 생성
+            var input=document.createElement("input");
+            input.type="text";
+            bt.innerText="카드생성";
+            bt2.innerText="자동 생성";
+            bt3.innerText="자동 종료";
+            bt.addEventListener("click", function(){
+                createCard();
+                
+            });
+            
+            
+            bt2.addEventListener("click", function(){
+                auto=setInterval("createCard()", 100);
+
+           });
+           
+           bt3.addEventListener("click", function(){
+                clearInterval(auto);
+
+           });
+
+
+            div=document.createElement("div");
+            div.style.width=800+"px";
+            div.style.height=600+"px";
+            div.style.background="yellow";
+            div.style.margin="auto";
+
+            document.body.appendChild(bt);
+            document.body.appendChild(div);
+            document.body.appendChild(bt2);
+            document.body.appendChild(bt3);
+        }
+
+        function createCard(){
+            var img=document.createElement("img");
+            img.src="../image/card"+cnt+".png";
+            img.style.position="relative";
+            img.style.width=100+"px";
+            img.style.height=100+"px";
+            cnt=(cnt%5)+1;
+            div.appendChild(img);
+        }
+            
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

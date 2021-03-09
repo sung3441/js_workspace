@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .wrapper{
+            width: 600px;
+            margin: auto;
+        }
+    </style>
+    <script>
+        //아이디 중복 검사를 위한 논리 값
+        //초기 값을 true로 줘서 중복 검사를 하지 않으면 이프문에 걸림
+        var idCheck=true;
+        var user_id;
+        window.addEventListener("load", function(){
+            //btd아이디를 갖은 요소를 가져오기(가입 버튼)
+            var bt=document.getElementById("btn");
+            //변수에 버튼을 생성해서 저장(아이디 중복검사용)
+            var samIdBt=document.createElement("button");
+            //아이디 중복검사 버튼에 넣을 텍스트 생성
+            var samIdText=document.createTextNode("아이디 중복 검사");
+            //테이블에서 아이디를 입력하는 td에 samId라는 아이디를 주고,
+            //가져왔다.
+            var samId=document.getElementById("samId");
+            //버튼안에 자식으로 텍스트 넣기
+            samIdBt.appendChild(samIdText);
+            //테이블 안에 버튼 추가하기
+            samId.appendChild(samIdBt);
+
+            //중복검사 버튼이 클릭 되면 함수 호출
+            samIdBt.addEventListener("click", function(){
+                //user_id 변수 재정의
+                user_id=document.getElementById("user-id");
+                console.log("내가 입력한 유저 아이디 값", user_id);
+                //user_id 안에 value가 "sss"와 같으면 중복
+                if(user_id.value=="sss"){
+                    alert("중복된 아이디입니다.")
+                    user_id.focus();
+                }else{
+                    alert("사용 가능한 아이디입니다.");
+                    //아이디가 중복 되지 않는다면, idCheck를 false로 바꿔서
+                    //유효성 검사를 할 때 이프문을 그냥 지나치게 된다.
+                    idCheck=false;
+                }
+
+            });
+            //가입 버튼을 눌렀을 때 이벤트 호출
+            bt.addEventListener("click", function(){
+                send();
+                
+            });
+        });
+
+        //웹서버에 가입양식의 내용을 네트웍을 통해 전송한다.
+        function send(){
+            //유효성 체크
+            user_id=document.getElementById("user-id");
+            var pw=document.getElementById("pw");
+            var pw2=document.getElementById("pw2");
+            var yes=document.getElementsByName("agree")[0].checked;
+
+            if(user_id.value==""){
+                alert("아이디를 입력하세요.");
+                //커서 올리기
+                user_id.focus();
+            }else if(idCheck){
+                alert("아이디 중복 검사를 하세요.");
+                //커서 올리기
+                user_id.focus();
+            }else if(pw.value==""){
+                alert("비밀번호를 입력하세요.");
+                pw.focus();
+            }else if(pw2.value==""){
+                alert("재확인 비밀번호를 입력하세요.");
+                pw2.focus();
+            }else if(pw.value!=pw2.value){
+                alert("비밀번호가 다릅니다.");
+                pw2.focus();
+            }else if(!yes){
+                alert("정보제공에 동의하세요!!!.");
+            }else{
+                var form1=document.getElementById("form1");
+                //입력양식인 form태그에는 전송대상 서버에 어떤 방식으로 전송할지 등을
+                //지정할 수 있다.
+                form1.action="http://daum.net";//전송대상 url
+                //form1.submit();//전송됨(네트웍을 통해 입력데이터들이 날아감)
+                alert("가입성공^^")
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- 전송대상이 되는 컴포넌트들을 전송양식으로 묶어야 하는데
+        이때 사용되는 태그가 바로 form태그다 -->
+        <form id="form1">
+            <table width="100%" border="2px">
+                <tr>
+                    <td id="samId">
+                        <input type="text" placeholder="your ID..." id="user-id" value="">
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="password" placeholder="your passwrad..." id="pw"></td>
+                </tr>
+                <tr>
+                    <td><input type="password" placeholder="confrim passwrad..." id="pw2"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <select name="" id="">
+                            <option value="">010</option>
+                            <option value="">011</option>
+                            <option value="">019</option>
+                        </select>-
+                        <input type="text" placeholder="앞자리"> -
+                        <input type="text" placeholder="뒷자리">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="radio" name="agree" id="" value="yes">동의
+                        <input type="radio" name="agree" id="" checked value="no">동의 안함
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button id="btn" type="button">가입</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</body>
+</html>
+질문//
+아이디 중복 검사를 하고싶은데 중복 검사를 하면 홈페이지가 새로고침 되는 것 같다..!!
