@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<style>
+    #wrapper{
+        margin: auto;
+        border: 2px red solid;
+        width: 900px;
+        height: 300px;
+        padding-top: 25px;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    #wrapper input{
+        font-size: 120px;
+        width: 200px;
+        height: 200px;
+        text-align: center;
+        border: 3px solid;
+    }
+
+    #wrapper button{
+        border: solid red 1px;
+        border-radius: 5px;
+        background-color: white;
+        font-size: 20px;
+    }
+
+    span{font-size: 60px;}
+    
+</style>
+<script>
+    //h=시간, min=분, sec=초
+    var h=0;
+    var min=0;
+    var sec=0;
+    //t_h는 시간 텍스트의 요소, t_min는 분 텍스트의 요소, t_sec는 초 텍스트의 요소
+    var t_h;
+    var t_min;
+    var t_sec;
+    //분과, 초를 나눌 값
+    var sixty=60;
+    //setInterval을 si변수에 담아서 claerIntevar에서 사용
+    var si;
+
+    //load되자마자 실행되는 함수
+    function init(){
+        //각 요소를 변수에 저장
+        t_h=document.getElementById("t_h");
+        t_min=document.getElementById("t_min");
+        t_sec=document.getElementById("t_sec");
+        //홈페이지를 열고 아무 동작도 안했을 때 보여질 값들
+        t_h.value="00";
+        t_min.value="00";
+        t_sec.value="00";
+    }
+
+    //숫자를 카운터(증가) 해주는 함수
+    function numberCnt(){
+        //99시 59분 59초 가되면 동작을 멈추도록 스탑함수를 호출
+        if(h==99 && min==59 && sec==59){
+            stopWatch();
+        }else{
+            //가장 먼저 초부터 증가
+            sec++
+            //60초가 되면 초를 0으로 초기화 하고, 분을 1증가
+            if(sec%sixty==0){
+                sec=0;
+                min++;
+                //분을 증가해서 60이 되면 분을 0으로 초기화 하고, 시간을 1증가
+                if(min%sixty==0){
+                    min=0;
+                    h++;
+                    //구해진 h, min, sec를 문자를 구하는 함수의 매개변수로 넣고 함수 호출
+                    //분과 초가 초기화 되고, 시간이 1증가한 곳
+                    getZeroString(h, min, sec);
+                }else{
+                    //초가 초기화 되고, 분만 1증가한 곳
+                    getZeroString(h, min, sec);
+                }
+            //초만 1증가한 곳
+            }else{
+                getZeroString(h, min, sec);
+            }
+        }
+    }
+
+    //매개변수로 받은 수가 10미만이면 문자 "0"과 붙여 출력하는 함수
+    //이 부분은 좀 단축 시킬 수 있을 것 같은데 생각이 안나서 무식한 방법으로 했습니다..
+    function getZeroString(h, min, sec){
+        //0이 10미만, 1은 10이상
+        //000
+        if(h<10 && min <10 && sec<10){
+            t_h.value="0"+h;
+            t_min.value="0"+min;
+            t_sec.value="0"+sec;
+        //001
+        }else if(h<10 && min <10 && sec>=10){
+            t_h.value="0"+h;
+            t_min.value="0"+min;
+            t_sec.value=sec;
+        //010
+        }else if(h<10 && min>=10 && sec<10){
+            t_h.value="0"+h;
+            t_min.value=min;
+            t_sec.value="0"+sec;
+        //011
+        }else if(h<10 && min >=10 && sec>=10 ){
+            t_h.value="0"+h;
+            t_min.value=min;
+            t_sec.value=sec;
+        //100
+        }else if(h>=10 && min <10 && sec<10){
+            t_h.value=h;
+            t_min.value="0"+min;
+            t_sec.value="0"+sec;
+        //101
+        }else if(h>=10 && min <10 && sec>=10){
+            t_h.value=h;
+            t_min.value="0"+min;
+            t_sec.value=sec;
+        //110
+        }else if(h>=10 && min >=10 && sec<10 ){
+            t_h.value=h;
+            t_min.value=min;
+            t_sec.value="0"+sec;
+        //111
+        }else{
+            t_h.value=h;
+            t_min.value=min;
+            t_sec.value=sec;
+
+        }
+    }
+
+    //start버튼을 누르면 함수를 실행
+    function startWatch(){
+        si=setInterval(numberCnt, 10);
+    }
+
+    //pause버튼을 누르면 실행 중인 함수를 멈춤
+    function stopWatch(){
+        clearInterval(si);
+
+    }
+    
+    //load가 끝나면 init()함수 호출
+    window.addEventListener("load", function(){
+        init();
+    });
+
+</script>
+</head>
+<body>
+    <div id="wrapper">
+        <input type="text" id="t_h"><span>시</span>
+        <input type="text" id="t_min"><span>분</span>
+        <input type="text" id="t_sec"><span>초</span>
+        <p>
+        <button onclick="startWatch()">start</button>
+        <button onclick="stopWatch()">pause</button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .wrapper{
+            height: 400px;
+            width: 500px;
+            background-color: yellowgreen;
+            margin: auto;
+            position: relative;
+        }
+
+        /* 사진이 보여지는 영역 */
+        #frame-photo{
+            width: 500px;
+            height: 340px;
+            background-color: yellow;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 버튼이 나올 영역 */
+        #navi{
+            width: 500px;
+            height: 60px;
+            background-color: red;
+            text-align: center;
+            font-size: 30px;
+        }
+
+        #container{
+            width: 3500px;
+            height: 340px;
+            position: absolute;
+        }
+
+        #container img{
+            float: left;
+            width: 500px;
+            height: 340px;
+        }
+
+        #navi a{
+            /*링크 밑줄 없애기*/
+            text-decoration: none;
+        }
+
+        /*a의 상태 즉, a가 hover상태인 경우 의미
+        :는 가상태그를 얘기 한다. 가상태그도 선택자로 사용가능*/
+        #navi a:hover{
+            color: yellow;
+        }
+
+        #navi a:active{
+
+            color: green;
+        }
+    </style>
+    <script>
+        var container; //모든 함수에 접근하기 위해.
+        var targetX=-3000;
+        var a=0.1;//비율 계수(숫자가 커질 수록 보폭이 커짐. 0.1~1사이로 조절하기)
+        var si;
+
+        window.addEventListener("load", function(){
+            container=document.getElementById("container");
+            container.style.left=0+"px";
+            container.style.top=0+"px";
+            init();
+        });
+        
+        function init(){
+            container=document.getElementById("container");
+            //부모를 기준으로 한 위치속성, 여기서 부모는 content div.
+            container.style.position="absolute";
+            container.style.top=0+"px";
+            container.style.left=0+"px";
+            si= setInterval("move()", 10);
+        }
+
+        
+        function move(n){
+            container=document.getElementById("container");
+            //나의 위치는= 현재 나의 위치+비율*(목표지점-현재 나의 위치)+px
+            if(parseInt(container.style.left)!=targetX){
+                container.style.left=parseFloat(container.style.left)+a*(targetX-parseFloat(container.style.left))+"px";
+                console.log("zz"+container.style.left);
+            }
+        }
+
+
+        function setTarget(x){
+            targetX=x;
+        }
+
+
+    </script>
+</head>
+<body>
+    <div class="wrapper">
+        <div id="frame-photo">
+            <!-- 길다란 사진을 모아놓은 컨테이너 -->
+            <div id="container">
+                <img src="../image/nba1.jpg">
+                <img src="../image/nba2.jpg">
+                <img src="../image/nba3.jpg">
+                <img src="../image/nba4.jpg">
+                <img src="../image/nba5.jpg">
+                <img src="../image/nba6.jpg">
+                <img src="../image/nba7.jpg">
+            </div>
+        </div>
+        <div id="navi">
+            <!--
+                html 문서에 자바스크립트를 작성할 수 있는 영역
+                1. script 태그 안에
+                2. 이벤트 핸들러 안에
+                3. a href 안에도 가능(javascript)
+            -->
+            <a href="javascript:setTarget(0)">●</a>
+            <a href="javascript:setTarget(-500);">●</a>
+            <a href="javascript:setTarget(-1000);">●</a>
+            <a href="javascript:setTarget(-1500);">●</a>
+            <a href="javascript:setTarget(-2000);">●</a>
+            <a href="javascript:setTarget(-2500);">●</a>
+            <a href="javascript:setTarget(-3000);">●</a>
+        </div>
+
+
+    </div>
+</body>
+</html>
