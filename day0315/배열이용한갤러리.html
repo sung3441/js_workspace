@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .wrapper{
+
+            width: 500px;
+            height: 500px;
+            position: relative;
+            margin: auto;
+        }
+
+        #pic{
+            width: 100%;
+            height: 400px;
+            background-color: blue;
+        }
+
+        #control{
+            width: 100%;
+            height: 100px;
+            background-color: red;
+            position: relative;
+        }
+
+        #leftBt{
+            position: absolute;
+            left: 0px;
+        }
+
+        #rightBt{
+            position: absolute;
+            right: 0px;
+
+        }
+
+        #pic img{
+
+            width: 100%;
+            height: 100%;
+        }
+
+    </style>
+    <script>
+        var a=0;
+        var picture;
+        var img;
+
+        window.addEventListener("load", function(  ){
+            init();
+            
+        });
+        
+        function init(){
+            picture=new Array();
+            picture[0]="../image/room.jpg";
+            picture[1]="../image/beem.png";
+            picture[2]="../image/ball.webp";
+            picture[3]="../image/bg.jpg";
+            picture[4]="../image/hero.jpg";
+            img=document.getElementById("photo");
+            
+
+        }
+
+        function leftMove(){
+             a--;
+            if(a>=0){
+                img.src=picture[a];
+            }else{
+                a=picture.length-1;
+            }
+        }
+
+        function rightMove(){
+            a++;
+            if(a<picture.length){
+                img.src=picture[a];
+            }else{
+                a=0;
+                img.src=picture[a];
+
+            }
+
+        }
+        
+
+    </script>
+</head>
+<body>
+    <div class="wrapper">
+        <div id="pic">
+            <img src="../image/room.jpg" alt="" id="photo">
+        </div>
+        <div id="control">
+            <img id="leftBt" src="../image/left.png" alt="" onclick="leftMove()">
+            <img id="rightBt" src="../image/right.png" alt="" onclick="rightMove()">
+
+        </div>
+
+    </div>
+</body>
+</html>

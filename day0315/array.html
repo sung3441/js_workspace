@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        
+    </style>
+    <script>
+        var cnt=0;
+        var lotto;
+        window.addEventListener("load", function(){
+            init();
+
+        });
+
+        function init(){
+            lotto=new Array();
+        }
+
+        function add(){
+            var a=parseInt(Math.random()*10);
+            console.log(cnt+"번 숫자는 : "+a);
+            lotto[cnt]=a;
+            cnt++;
+        }
+        
+        function arPrint(){
+            for(var i=0; i<lotto.length; i++){
+                document.write(lotto[i]+"<br>");
+            }
+        }
+        
+    </script>
+</head>
+<body>
+    <button onclick="add()">배열에 수 넣기</button>
+    <button onclick="arPrint()">결과보기</button>
+</body>
+</html>
