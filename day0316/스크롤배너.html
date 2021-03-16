@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<script>
+//모든 것을 동적으로 처리할 예정이므로 전역으로 선언 해두기
+var container;
+var imgWidth=100;//상품 이미지의 너비
+var imgHeight=100;//상품 이미지의 높이
+var gap=5;//상품 사이의 간격
+var imgCnt=3; //액자에 보여질 이미지 수, 액자의 크기를 결정
+var imgAr=["../image/bg.jpg",
+    "../image/card1.png",
+    "../image/coding.jpg",
+    "../image/hero.jpg",
+    "../image/nba1.jpg",
+    "../image/nba2.jpg",
+    "../image/batabase.jpg"
+];
+var bannerImg=[];
+var targetX;
+var flag=true;
+
+function init(){
+    //이미지들을 올려놓을 액자 컨테니어
+ 
+    createFrame();
+    createImg();
+    setInterval("flowImg()", 10);
+}
+
+//액자 생성하기
+function createFrame(){
+    container=document.createElement("div");
+    container.style.width=(imgCnt*imgWidth)+(gap*(imgCnt))+"px";
+    container.style.height=(imgHeight+(gap*2))+"px";
+    container.style.backgroundColor="red";
+    container.style.margin="auto";
+    container.style.position="relative";
+    container.style.overflow="hidden";
+    
+    document.body.appendChild(container);
+}
+
+//이미지 생성하기
+function createImg(){
+    for(var i=0; i<imgAr.length; i++){
+        var img=document.createElement("img");
+        img.src=imgAr[i];
+        img.style.width=imgWidth+"px";
+        img.style.height=imgHeight+"px";
+        img.style.position="absolute";
+        img.style.left=(gap+((gap+imgWidth)*i))+"px";
+        img.style.top=gap+"px";
+        img.addEventListener("mouseover", function(){
+            flag=false;
+
+        });
+
+        img.addEventListener("mouseout", function(){
+            flag=true;
+
+        });
+        
+        container.appendChild(img);
+        //비어있는 배열에 이미지 밀어넣기 push는 배열안에 값을 넣는다. 
+        //인덱스 번호를 0 1 2 3 4 5...순서대로 넣는다,
+        bannerImg.push(img);
+    }
+}
+
+function flowImg(){
+    if(flag){
+        for(var i=0; i<bannerImg.length; i++){
+            bannerImg[i].style.left=parseInt(bannerImg[i].style.left)-1+"px";
+            if(parseInt(bannerImg[i].style.left)==(-imgWidth-gap)){
+                targetX=(imgWidth+gap)*(bannerImg.length-1);
+                console.log(targetX);
+                bannerImg[i].style.left=targetX+"px";
+            }
+        }
+    }
+}
+
+
+
+window.addEventListener("load", function(){
+    init();
+
+});
+
+
+
+
+
+</script>
+</head>
+<body>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<style>
+    .wrapper{
+        width: 1050px;
+        height: 750px;
+        background-color: yellow;
+        overflow: hidden;
+    }
+    
+    #content{
+        width: 850px;
+        height: 100%;
+        background: url("../image/roller.png");
+        float: left;
+        background-repeat: no-repeat;
+        background-size: 850px 750px;
+
+    }
+
+    #log{
+        width: 200px;
+        height: 100%;
+        background-color: greenyellow;
+        float: left;
+
+    }
+    
+    body{margin: 0px;}
+
+</style>
+<script>
+var x;
+var y;
+var content;
+var log;
+var pointAr=[];
+var img;
+var cnt=0;
+var result="";
+var si;
+var a=0.1;
+var si2;
+
+
+window.addEventListener("load", function(){
+    init();
+
+});
+
+
+function createDot(){
+    var dot=document.createElement("span");
+    x=event.clientX;
+    y=event.clientY;
+    dot.innerText="●";
+    dot.style.fontSize=4+"px";
+    dot.style.position="absolute";
+    dot.style.left=x+"px";
+    dot.style.top=y+"px";
+    dot.style.color="red";
+    
+    content.appendChild(dot);
+    
+    var pos=[x, y];
+    pointAr.push(pos);
+
+    printPos();//기록 남기기
+}
+
+function printPos(){
+    //좌표가 누적된 pointAr의 데이터를 div에 출력
+    result+="[x 좌표 :"+x+" y 좌표 :"+y+"]\n";
+    log.innerText=result;
+}
+
+function init(){
+    log=document.getElementById("log");
+    content=document.getElementById("content");
+    createHero();
+}
+
+function createHero(){
+    img=document.createElement("img");
+    img.src="../image/card1.png";
+    img.style.position="absolute";
+    img.style.width=30+"px";
+    img.style.height=50+"px";
+    content.appendChild(img);
+}
+
+function moveImg(){
+    if(cnt<pointAr.length){
+        var targetX=(pointAr[cnt][0]-15);
+        var targetY=(pointAr[cnt][1]-25);
+        img.style.left=targetX+"px";
+        img.style.top=targetY+"px";
+        cnt++;
+    }
+}
+
+function autoMove(){
+    setInterval("moveImg()", 100);
+}
+
+</script>
+</head>
+<body>
+    <div class="wrapper">
+        <div id="content" onclick="createDot()">
+        </div>
+        <div id="log">좌표로그</div>
+    </div>
+    <button onclick="moveImg()">move</button>
+    <button onclick="autoMove()">auto</button>
+</body>
+</html>
