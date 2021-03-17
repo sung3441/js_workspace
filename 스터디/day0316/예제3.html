@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<script>
+var a=["10","50","60"]; 
+var b=["100", "80", "70"];
+var c=[];
+var box;
+var result;
+
+c.push(a);
+c.push(b);
+
+/*  이렇게 c안에 a랑 b를 넣어줘야 2차 배열이 돼요!*/
+function createdo(){
+    var result="";
+    box=document.getElementById("bx");
+    for(var i=0;i<c.length; i++){
+        for(var j=0; j<b.length; j++){
+            result+=c[i][j]+"    ";
+        }
+    }
+    box.innerText=result;
+  
+}
+function bob(){
+    box=document.createElement("div");
+    box.style.width=600+"px";
+    box.style.height=600+"px";
+    box.style.backgroundColor="red";
+    box.id="bx";
+    document.body.appendChild(box);
+}
+
+function init(){
+bob();
+createdo();
+
+}
+
+window.addEventListener("load",function(){
+  init();
+});
+
+</script>
+
+</head>
+<body>
+    
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<style>
+body{margin: 0px;}
+
+#wrapper{
+    width: 1200px;
+    height: 600px;
+    background: red;
+    overflow: hidden;
+}
+
+#container{
+    height: 100%;
+    width: 1000px;
+    float: left;
+    background: yellow;
+}
+
+#log{
+    height: 100%;
+    width: 200px;
+    float: left;
+    background: wheat;
+    overflow: scroll;
+}
+
+</style>
+<script>
+    var container;
+    var log;
+    var rectWidth=20;
+    var rectHeight=20;
+    var rectArr=[];
+    var recordAr=[];
+    var result="";
+    var mouseOverFlag=false;
+    var recFlag=false;
+    var debugFlag=false;
+    var playFlag=false;
+    var cnt=0;
+
+function init(){
+    container=document.getElementById("container");
+    log=document.getElementById("log");
+    createRect();
+    setInterval("playMove()", 300);
+}
+
+function createRect(){
+    for(var i=0; i<=1000/rectWidth; i++){
+        var rectAr=[];
+        for(var j=0; j<=600/rectHeight; j++){
+            var rect=document.createElement("div");
+            rect.style.width=rectWidth+"px";
+            rect.style.height=rectHeight+"px";
+            rect.style.boxSizing="border-box";
+            rect.style.float="left";
+            rect.id=[i, j];
+            rect.addEventListener("mouseover", function(){
+                console.log("마우스 올려놓음");
+                if(mouseOverFlag){
+                    this.style.background="red";
+                    if(recFlag){
+                        console.log("아이디 원래 출력 : "+this.id);
+                        var rectXY=(this.id).split(",");
+                        recordAr.push(rectXY);
+                        console.log(recordAr[0]);
+                        result+="좌표 : "+this.id+"\n";
+                        log.innerText=result;
+                    }
+                }
+            });
+            container.appendChild(rect);
+            rectAr.push(rect);
+        }
+        rectArr.push(rectAr);
+    }
+}
+
+function mouseDown(){
+    mouseOverFlag=true;
+}
+
+function mouseUp(){
+    mouseOverFlag=false;
+}
+
+function playClick(){
+    playFlag=true;
+}
+
+function recClick(){
+    var recBt=document.getElementById("rec-bt");
+    if(recFlag){
+        recFlag=false;
+        recBt.style.background="none";
+    }else{
+        recFlag=true;
+        recBt.style.background="red";
+    }
+}
+
+function delClick(){
+    for(var i=0; i<rectArr.length; i++){
+        for(var j=0; j<rectArr[i].length; j++){
+            rectArr[i][j].style.background="yellow";
+        }
+    } 
+}
+
+function debugClick(){
+    var lineColor;
+    debugFlag=!debugFlag;
+    (debugFlag)? lineColor="1px solid red": lineColor="none";
+    for(var i=0; i<rectArr.length; i++){
+        for(var j=0; j<rectArr[i].length; j++){
+            rectArr[i][j].style.border=lineColor;
+        }
+    }
+}
+
+function playMove(){
+    if(playFlag){
+        if(cnt<recordAr.length){
+                var x=recordAr[cnt][0];
+                var y=recordAr[cnt][1];
+                rectArr[x][y].style.background="black";
+                cnt++
+        }else{
+            cnt=0;
+            playFlag=false;
+        }
+    }
+}
+
+
+window.addEventListener("load", function(){
+    init();
+
+});
+</script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="container" onmousedown="mouseDown()" onmouseup="mouseUp()"></div>
+        <div id="log"></div>
+    </div>
+    <button onclick="recClick()" id="rec-bt">REC</button>
+    <button onclick="delClick()">DELETE</button>
+    <button onclick="playClick()">PLAY</button>
+    <button onclick="debugClick()">Debug</button>
+</body>
+</html>

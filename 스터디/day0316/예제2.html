@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+    </style>
+    <script>
+        var school=[];
+        var ban1=[100, 50, 70, 100];
+        var ban2=[90, 50, 60, 80];
+        school.push(ban1);
+        school.push(ban2);
+        
+        function show(){
+            var a=parseInt(prompt("몇 반 학생?"));
+            var b=parseInt(prompt("학생의 번호는?"));
+            document.write(a+"반 "+b+"번 학생의 성적 : "+school[a-1][b-1]);
+            
+        }
+        
+    </script>
+</head>
+<body>
+    <button onclick="show()">123</button>
+</body>
+</html>

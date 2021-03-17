@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<style>
+    #wrapper{
+        width: 1200px;
+        height: 900px;
+        background-color: lavenderblush;
+    }
+
+    #sc input{
+        width: 1100px;
+        height: 700px;
+
+    }
+
+    body{margin: 0px;}
+</style>
+<script>
+    //학생의 이름을 담을 배열
+    var student=[];
+    //학생의 성적을 담을 배열
+    var score=[];
+    //성적을 보여줄 input요소를 가져온 것
+    var txt;
+    
+    //반의 갯수, 몇 반까지 있는지
+    var gropNo=0;
+    //한 반의 학생의 명 수
+    var stuNo=0;
+    var index=0;
+    
+    
+    window.addEventListener("load", function(){
+        init();
+        
+    });
+    
+    function setOption(){
+        gropNo=parseInt(prompt("반의 갯수 설정 : "));
+        stuNo=parseInt(prompt("한 반의 인원 설정 : "));
+        txt.value="반의 갯수 : "+gropNo+"\n한 반의 인원 : "+stuNo;
+        
+    }
+    
+    function addScore(){
+        for(var i=0; i<gropNo; i++){
+            var banName=[];
+            var banScore=[];
+            for(var j=0; j<stuNo; j++){
+                var name=prompt(i+1+"반 "+(j+1)+ "번 학생의 이름을 입력하세요");
+                var stuScore=parseInt(prompt(i+1+"반 "+(j+1)+ "번 학생의 평균을 입력하세요"));
+                banName.push(name);
+                banScore.push(stuScore);
+            }
+            student.push(banName);
+            score.push(banScore);
+        }
+    }
+    
+    
+    function showScore(){
+        var total=0;
+        var result="";
+        for(var i=0; i<gropNo; i++){
+            result+="==="+(i+1)+"반 학생들의 성적===\n";
+            for(var j=0; j<stuNo; j++){
+                result+=student[i][j]+"의 성적 : "+score[i][j]+"\n";
+                total+=score[i][j];
+            }
+            result+="--"+(i+1)+"반 평균점수 : "+(total/stuNo);
+            result+="\n\n";
+            total=0;
+        }
+        txt.value=result;
+        
+    }
+    
+    
+    function init() {
+        txt=document.getElementById("txt");
+        txt.style.fontsize=100+"px";
+        txt.value="성적이 나올 곳입니다";
+        
+    }
+
+    function oneScore(){
+        var a=parseInt(prompt("반 입력 :"));
+        var b=parseInt(prompt("학생의 번호 입력 :"));
+        txt.value=a+"반"+b+"번 학생의 성적 조회\n이름 : "+student[a-1][b-1]+"\n성적 : "+score[a-1][b-1];
+    }
+    
+    </script>
+</head>
+<center>
+
+    <body>
+        <div id="wrapper">
+            <h1>학생 관리 프로그램</h1>
+            <div id="sc">
+                <textarea name="" id="txt" cols="150" rows="50"></textarea>
+            </div>
+            <button onclick="setOption()">반 인원 설정</button>
+            <button onclick="addScore()">학년 성적 추가하기</button>
+            <button onclick="showScore()">성적 조회하기</button>
+            <button onclick="oneScore()">개인 성적 조회하기</button>
+        </div>
+    </body>
+</center>
+</html>

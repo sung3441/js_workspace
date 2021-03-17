@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container{
+            width: 1000px;
+            height: 600px;
+            background: url("../image/bg.jpg");
+            background-repeat: no-repeat;
+            background-size: 1500px 800px;
+            margin: auto;
+            position: relative;
+            
+ 
+
+        }
+    </style>
+    <script>
+        var container;
+        var map=[
+            [0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0],
+            [0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0],
+            [0,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,0],
+            [1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
+            [0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0],
+            [0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0],
+            [0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0],
+            [0,0,0,0,0,1,0,0,0,1,1,0,0,0,1,0,0,0,0,0],
+            [0,0,0,0,0,0,1,0,1,0,0,1,0,1,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0]
+        ];
+
+        function init(){
+            container=document.getElementById("container");
+            createBlock();
+
+        }
+        //게임에 등장할 블럭을 올려놓자!!
+        function createBlock(){
+            for(var i=0; i<map.length; i++){
+                for(var j=0; j<map[i].length; j++){
+                    if(map[i][j]==1){
+                        var img=document.createElement("img");
+                        img.src="../image/block.png";
+                        img.style.position="absolute";
+                        img.style.width=50+"px";
+                        img.style.height=50+"px";
+                        img.style.top=(50*i)+"px"
+                        img.style.left=(50*j)+"px"
+
+                        container.appendChild(img);
+                    }
+               }
+           }
+        }
+
+        window.addEventListener("load", function(){
+            init();
+
+        });
+    </script>
+</head>
+<body>
+    <div id="container"></div>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이차원 배열은 데이터 베이스다.</title>
+<style>
+.wrapper{
+    width: 1200px;
+    height: 600px;
+    background-color: green;
+    overflow: hidden;
+}
+
+#content{
+    overflow: hidden;
+    width: 1000px;
+    height: 100%;
+    background-color: yellow;
+    float: left;
+}
+
+#log{
+    width: 200px;
+    height: 100%;
+    background-color: ivory;
+    float: left;
+    overflow: scroll;
+
+}
+
+body{margin: 0px;}
+</style>
+<script>
+var rectArr=[];
+var content;
+var log;
+var border=0;
+var rect;
+var flag=false; //색상 적용을 할지 여부를 결정하는 논리값 전역변수
+var recordArray=[];// x, y의 자취를 저장할 배열
+var recordFlag=false;
+var boxSize=5;
+var playFlag=false;
+var cnt=0;
+var si;
+
+function init(){
+    content=document.getElementById("content");
+    log=document.getElementById("log");
+    createRect();
+    si=setInterval("recPlay()",100);
+
+    content.addEventListener("mousedown", function(){
+        flag=true;
+    });
+    content.addEventListener("mouseup", function(){
+        flag=false;
+    });
+        
+}
+
+//그림판의 픽셀을 표현할 사각형 생성
+function createRect(){
+    for(var i=0; i<(600/boxSize); i++){
+        var rectAr=[];
+        for(var j=0; j<(1000/boxSize); j++){
+            rect=document.createElement("div");
+            rect.style.width=boxSize+"px";
+            rect.style.height=boxSize+"px";
+            rect.style.boxSizing="border-box";
+            rect.style.float="left";
+            rect.id=[i, j];
+            //박스안에 이너텍스트 좌표넣기
+           // rect.innerText=rect.id;
+            rect.addEventListener("mouseover", function(){
+                //this는 지금 이벤트를 일으킨 요소를 말한다.
+                if(flag){
+                    this.style.background="red";
+                    //층과 호를 구해서 일차원 배열로 저장한 후, 최종적으로 recordArray에 저장
+                    if(recordFlag){
+                        var arr=(this.id).split(",");
+                        recordArray.push(arr);
+                        printLog();
+                    }
+                }
+            });
+            content.appendChild(rect);
+            rectAr.push(rect);
+        }
+        rectArr.push(rectAr);
+    }
+}
+
+
+function setFlag(){
+    border=(border==0)? 1: 0;
+        for(var i=0; i<rectArr.length; i++){
+            for(var j=0; j<rectArr[i].length; j++){
+                rectArr[i][j].style.border=border+"px red solid";
+        }
+    }   
+}
+
+
+function recPlay(){
+    if(playFlag){
+        var dot=recordArray[cnt];
+        console.log("zz"+recordArray[cnt]);
+        var x=dot[0];
+        var y=dot[1];
+        rectArr[x][y].style.background="black";
+        cnt++;
+        if(cnt>=recordArray.length){
+            playFlag=false;
+            cnt=0;
+        }
+    }
+}
+
+function setRecordFlag(){
+    var recBt=document.getElementById("rec-bt");
+    recordFlag=!recordFlag;//버튼 하나로 녹화 해제 녹화 중 변경
+    (recordFlag)? recBt.style.background="red": recBt.style.background="none";
+    if(recordFlag){
+        for(var i=0; i<rectArr.length; i++){
+                for(var j=0; j<rectArr[i].length; j++){
+                    rectArr[i][j].style.background="yellow";
+            }
+        }
+    }   
+}
+
+function printLog(){
+    var result="";
+    var arr;
+    for(var i=0; i<recordArray.length;i++){
+        arr=recordArray[i];
+        result+="x좌표 : "+arr[0]+"       y좌표 : "+arr[1]+"\n";
+    }
+    log.innerText=result;
+}
+
+function erase(){
+    for(var i=0; i<rectArr.length; i++){
+        for(var j=0; j<rectArr[i].length; j++){
+                    rectArr[i][j].style.background="none";
+        }
+    }
+}
+
+function setPlayFlag(){
+    playFlag=!playFlag;
+
+}
+
+window.addEventListener("load", function(){
+    init();
+
+});
+
+</script>
+</head>
+<body>
+    <div class="wrapper">
+        <div id="content"></div>
+        <div id="log"></div>
+    </div>
+    <button onclick="setRecordFlag()" id="rec-bt">REC</button>
+    <button onclick="erase()">DEL</button>
+    <button onclick="setPlayFlag()">PLAY</button>
+    <button onclick="setFlag()">Debug모드</button>
+</body>
+</html>
