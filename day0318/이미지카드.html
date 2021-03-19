@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        var wrapper;
+        //텍스트 박스용 이미지
+        var a=0.1;
+        var cardArray=[];
+        var targetY=[];
+        var msg=["스테판 커리", "르브론 제임스", "앨런 아이버슨"];
+        var imgArray=["url(../image/nba1.jpg)", "url(../image/nba3.jpg)","url(../image/nba7.jpg)"];
+
+        function init(){
+            wrapper=document.getElementById("wrapper");
+            for(var i=0; i<3; i++){
+                targetY[i]=270;
+                cardArray[i]=createCard([i], imgArray[i], msg[i]);
+                wrapper.appendChild(cardArray[i]);
+            }
+        }
+        
+        //카드 한개를 생성하는 함수
+        function createCard(target, img, msg){
+            var card=document.createElement("div");//이미지를 배경으로 안고 있는 바깥쪽 카드
+            card.style.width=300+"px";
+            card.style.height=320+"px";
+            card.style.backgroundImage=img;
+            card.style.backgroundSize="cover";
+            card.style.float="left";
+            card.style.overflow="hidden";
+            card.style.position="relative";
+            card.style.margin=15+"px";
+
+            //텍스트 박스+
+            var textBox=document.createElement("div");
+            textBox.style.width=300+"px";
+            textBox.style.height=320+"px";
+            textBox.style.backgroundColor="rgb(65, 65, 63)";
+            textBox.style.position="absolute";
+            textBox.style.top=270+"px";
+            textBox.innerText=msg;
+            textBox.style.color="white";
+            textBox.style.textAlign="center";
+            textBox.style.fontSize=30+"px";
+            textBox.style.paddingTop=5+"px";
+            textBox.style.boxSizing="border-box";
+            //투명도 조절 0이 투명~1이 불투명
+            textBox.style.opacity=0.7;
+            //var index=i;
+            textBox.addEventListener("mouseover", function(){
+                //나중에 텍스트 박스의 인덱스를 결정
+                targetY[target]=0;
+            });
+
+            textBox.addEventListener("mouseout", function(){
+                targetY[target]=270;
+            });
+
+            card.appendChild(textBox);
+            return card;
+        }
+        
+        //부드럽게 오르내리기 감속도 처리 함수
+        function slideUpDown(){
+            //물체위치=현재 물체 위치+  a*(목표위치-현재 물체 위치)
+            for(var i=0; i<cardArray.length; i++ ){
+                var textBox=cardArray[i].children[0];//textBox안쪽이라는 안쪽 div를 지칭
+                textBox.style.top=parseFloat(textBox.style.top)+a*(targetY[i]-parseFloat(textBox.style.top))+"px";
+            }
+        }
+
+        window.addEventListener("load", function(){
+            init();
+            setInterval("slideUpDown()", 30);
+
+        });
+    </script>
+    <style>
+        #wrapper{
+            width: 1000px;
+            height: 340px;
+            background-color: blanchedalmond;
+            margin: auto;
+            overflow: hidden;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="wrapper"></div>
+</body>
+</html>
