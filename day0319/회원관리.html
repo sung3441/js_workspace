@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<style>
+.wrapper{
+    width: 1000px;
+    height: 600px;
+    margin: auto;
+    overflow: hidden;
+    border: black 1px solid;
+}
+
+#regist-area, #detail-area{
+    width: 150px;
+    height: 100%;
+    background:rgb(119, 184, 55);
+    padding-top: 150px;
+    padding-left: 5px;
+    box-sizing: border-box;
+    float: left;
+
+
+}
+
+#list-wrapper{
+    width: 700px;
+    height: 100%;
+    float: left;
+
+}
+
+#regist-area input, #detail-area input{
+    width: 130px;
+    font-size: 18px;
+    margin-top: 15px;
+    margin-left: 5px;
+    box-sizing: border-box;
+    border: 1px solid #ffffff;
+}
+
+/* 등록 버튼 디자인 */
+#regist-area button{
+    width: 100px;
+}
+
+#list-area{
+    /* 검색창이랑 거리두기 */
+    padding-top: 15px;
+}
+
+</style>
+<script src='../js/font.js'></script>
+<script>
+var listArea;//테이블에 출력될 div영역
+var detailArea;//수정 삭제할 div영역
+var t_id, t_name, t_phone, t_money;
+var t_id2, t_name2, t_phone2, t_money2;
+var memberArr=[];
+var key=0;
+var searchBox;
+var keyAr=[];
+//등록하기
+function regist(){
+    //등록 전에 특히 숫자형 데이터에 대해서는 유효성 체크를 꼭 해두자!!
+    if(t_name.value=="" || t_id.value=="" || t_money.value=="" || t_phone.value==""){  
+        alert("빈칸을 두지 마세요~");
+    }else{
+        if(isNaN(t_money.value)){
+            alert("돈은 숫자만~");
+            t_money.value="";
+            t_money.focus();
+            return;
+        }else if(isNaN(t_phone.value)){
+            alert("번호는 숫자만~");
+            t_phone.value="";
+            t_phone.focus();
+            return;
+        }
+        for(var i=0; i<memberArr.length;i++){
+            if(memberArr[i][0]==t_id.value){
+                alert("중복되는 ID입니다!!");
+                t_name.value="";
+                t_name.focus();
+                return
+            }
+        }
+    
+    //등록버튼에 의해 존재할 수 있는 회원은 1명이므로
+    //1명의 데이터는 1차원 배열에 담으면 된다.
+    var member=[]; //비어있는 배열 선언
+    member[0]=t_id.value;
+    member[1]=t_name.value;
+    member[2]=t_phone.value;
+    member[3]=t_money.value;
+    //한 사람의 정보가 메모리에 올라옴!!
+    
+    //이차원 배열 용도로 선언한 memberArray에 추가!
+    memberArr.push(member);
+
+    getList(); //등록된 데이터를 표로 보여주기 위해, 즉, 시각화 시키기위해 호출
+
+    t_id.value="";
+    t_name.value="";
+    t_phone.value="";
+    t_money.value="";
+    }
+}
+
+//테이블로 출력하기
+function getList(){
+    var tag="<table style=\"text-align: center;\" width=\"95%\"border=\"1\">";
+    tag+="<tr style=\"background: #ccc\">";
+    tag+="<td>No</td>";
+    tag+="<td>ID</td>";
+    tag+="<td>Name</td>";
+    tag+="<td>Phone</td>";
+    tag+="<td>Money</td>";
+    tag+="</tr>";
+    
+    //돈의 합계를 구하는 변수
+    var sum=0;
+
+    for(var i=memberArr.length-1; i>=0; i--){
+        tag+="<tr onClick=\"detailData("+i+")\">";
+        tag+="<td>"+(i+1)+"</td>";
+        for(var j=0; j<memberArr[i].length; j++){
+            tag+="<td asd>"+memberArr[i][j]+"</td>";
+        }
+        sum+=parseInt(memberArr[i][3]);
+        tag+="</tr>";
+    }
+    var avg=sum/memberArr.length
+    tag+="<tr>";
+    tag+="<td colspan='5' align='right'>가입 회원 수 : "+memberArr.length+"명, 누적 자산 : "+sum+"원, 평균 자산 : "+avg+"</td>";
+    tag+="</tr>";
+    tag+="</table>";
+    //이너HTML을 쓰면 안에 HTML태그를 붙여 넣을 수 있기링~
+    listArea.innerHTML=tag;
+}
+
+//여기까지 만지는 중
+function detailData(n){
+    t_id2.value=memberArr[n][0];
+    t_name2.value=memberArr[n][1];
+    t_phone2.value=memberArr[n][2];
+    t_money2.value=memberArr[n][3];
+    //여기서 키는 선택한 행의 번호가 되며 삭제나, 수정을 할 때 사용 됨
+    key=n;
+
+}
+
+function search(){
+    var select=document.getElementById("select").options.selectedIndex;
+    
+    for(var i=0; i<memberArr.length; i++){
+        if(memberArr[i][select]==searchBox.value){
+            keyAr.push(i);
+        }
+    }
+        if(keyAr.length>0){
+            var tag="<table style=\"text-align: center;\" width=\"95%\"border=\"1\">";
+            tag+="<tr style=\"background: #ccc\">";
+            tag+="<td>No</td>";
+            tag+="<td>ID</td>";
+            tag+="<td>Name</td>";
+            tag+="<td>Phone</td>";
+            tag+="<td>Money</td>";
+            tag+="</tr>";
+
+            for(var i=0; i<keyAr.length; i++){
+                tag+="<tr onClick=\"detailData("+keyAr[i]+")\">";
+                tag+="<td>"+(keyAr[i]+1)+"</td>";
+                for(var j=0; j<memberArr[keyAr[i]].length; j++){
+                    tag+="<td asd>"+memberArr[keyAr[i]][j]+"</td>";
+                }
+                tag+="</tr>";
+            }
+            tag+="</table>";
+            listArea.innerHTML=tag;
+        }else{
+            alert("검색되는 고객 정보가 없습니다~");
+        }
+    searchBox.value="";
+}
+
+
+
+//고객 정보 업데이트
+function update(){
+    if(confirm(memberArr[key][1]+" 고객의 정보를 수정하시겠습니까?")){
+        memberArr[key][0]=t_id2.value;
+        memberArr[key][1]=t_name2.value;
+        memberArr[key][2]=t_phone2.value;
+        memberArr[key][3]=t_money2.value;
+        getList();
+
+        alert(memberArr[key][1]+" 고객의 정보 수정 완료");
+        t_id2.value="";
+        t_name2.value="";
+        t_phone2.value="";
+        t_money2.value="";
+    }
+}
+
+//고객 정보 삭제하기
+function delDate(){
+    if(confirm("정말로"+memberArr[key][1]+" 고객의 정보를 삭제하시겠습니까?")){
+        alert(memberArr[key][1]+" 고객의 정보 삭제 완료");
+        memberArr.splice(key, 1);
+        getList();
+
+        t_id2.value="";
+        t_name2.value="";
+        t_phone2.value="";
+        t_money2.value="";
+    }
+}
+
+function init(){
+    listArea = document.getElementById("list-area");
+    t_id=document.getElementById("t_id");
+    t_name=document.getElementById("t_name");
+    t_phone=document.getElementById("t_phone");
+    t_money=document.getElementById("t_money");
+    
+    detailArea = document.getElementById("detail-area");
+    t_id2=document.getElementById("t_id2");
+    t_name2=document.getElementById("t_name2");
+    t_phone2=document.getElementById("t_phone2");
+    t_money2=document.getElementById("t_money2");
+
+    searchBox=document.getElementById("searchBox");
+    getList();
+}
+
+window.addEventListener("load", function(){
+    init();
+}); 
+</script>
+</head>
+<body>
+    <div class="wrapper">
+        <div id="regist-area">
+            <input type="text" id="t_id" placeholder="id..">
+            <input type="text" id="t_name" placeholder="name..">
+            <input type="text" id="t_phone" placeholder="phone..">
+            <input type="text" id="t_money" placeholder="money..">
+
+            <button onclick="regist()">등록</button>
+        </div>
+        <div id="list-wrapper">
+            <center>
+            <div id="search-area">
+                <button onclick="getList()">
+                    <i class='fas fa-home' style='font-size:18px'></i>
+                </button>
+                <select id="select">
+                    <option value="">ID 검색</option>
+                    <option value="">이름 검색</option>
+                </select>
+                <input type="text" placeholder="검색어 입력" id="searchBox">
+                <button style='font-size:18px' onclick="search()">
+                    Search<i class='fas fa-search'></i>
+                </button>
+            </div>
+            <div id="list-area">
+            </div>
+        </center>
+        </div>
+        <div id="detail-area">
+            <input type="text" id="t_id2" placeholder="id..">
+            <input type="text" id="t_name2" placeholder="name..">
+            <input type="text" id="t_phone2" placeholder="phone..">
+            <input type="text" id="t_money2" placeholder="money..">
+            <button onclick="update()">수정</button>
+            <button onclick="delDate()">삭제</button>
+        </div>
+    </div>
+</body>
+</html>
