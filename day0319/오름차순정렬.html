@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Untitled Document</title>
+<script type="text/javascript">
+var banners = new Array();
+function preload(){
+    for (var i=0; i<preload.arguments.length; i++) {
+        banners[i] = new Image()
+        banners[i].src = preload.arguments[i]
+    }
+}
+preload(
+    "http://fllkorea2.mireene.com/test/banner1.png",
+    "http://fllkorea2.mireene.com/test/banner2.png",
+    "http://fllkorea2.mireene.com/test/banner3.png",
+    "../imgae/catFace.png"  // mouseout시 보여질 빈 이미지
+)
+
+function showImg(url){
+    var banner = document.getElementById("banner");
+    if(url){ banner.src = url.src; } 
+    else { banner.src = banners[banners.length-1].src; }
+}
+</script>
+</head>
+
+<body>
+<img src="http://fllkorea2.mireene.com/test/blank.png" id="banner" width="300" height="100">
+<p>
+    <a href="#" onmouseover="showImg(banners[0])" onmouseout="showImg()">▲</a>/
+    <a href="#" onmouseover="showImg(banners[1])" onmouseout="showImg()">▲</a>/
+    <a href="#" onmouseover="showImg(banners[2])" onmouseout="showImg()">▲</a>
+</p>
+</body>
+</html>
