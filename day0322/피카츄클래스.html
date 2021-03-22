@@ -1,0 +1,19 @@
+<script>
+class Picachu{
+    constructor(x, y){
+        //속성은 변수로 표현
+        this.x = x;
+        this.y = y;
+        this.img = document.createElement("img");
+        this.img.src = "../image/pika.png";
+        this.img.style.position = "absolute";
+        this.img.style.left = this.x+"px";
+        this.img.style.top = this.y+"px";
+        this.img.style.width = 100+"px";
+
+        //body에 부착
+        document.body.appendChild(this.img);
+    }
+    //동작은 함수로 표현
+}
+</script>

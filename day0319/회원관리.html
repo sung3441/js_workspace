@@ -74,11 +74,6 @@ function regist(){
             t_money.value="";
             t_money.focus();
             return;
-        }else if(isNaN(t_phone.value)){
-            alert("번호는 숫자만~");
-            t_phone.value="";
-            t_phone.focus();
-            return;
         }
         for(var i=0; i<memberArr.length;i++){
             if(memberArr[i][0]==t_id.value){

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<script src="./Ball.js"></script>
+<script src="../js/lib.js"></script>
+<script>
+    var wrapper;
+    var colorAr = ["red", "orange", "yellow", "green", "blue", "navy", "purple"];
+    var xAr = [30, 725];
+    var yAr = [30, 625];
+    var ballAr = [];
+function init(){
+    createWall();
+
+}
+
+//공을 가두어 놓을 벽
+function createWall(){
+    wrapper = document.createElement("div");
+    wrapper.style.width = 800+"px";
+    wrapper.style.height = 700+"px";
+    wrapper.style.border = 10+"px red solid";
+    wrapper.style.position = "relative"; //자식인 공 때문에
+    wrapper.style.boxSizing = "border-box";
+     
+    document.body.appendChild(wrapper);
+    document.body.style.margin = 0+"px";
+}
+
+function createBall(){
+    var ball = new Ball(wrapper, (getRandom(3)+1), colorAr[getRandom(colorAr.length)], xAr[getRandom(xAr.length)], yAr[getRandom(yAr.length)]);//생성되는 공은 wrapper에 부착 됨
+    ballAr.push(ball);
+}
+
+//키보드의 스페이바를 누르면, 볼을 생성
+function space(){
+    if(event.keyCode==32){
+        createBall();
+
+    }
+
+}
+
+function autoMove(){
+    for(var i = 0; i < ballAr.length; i++){
+        ballAr[i].ballMove();
+    }
+}
+
+window.addEventListener("load", function(){
+    init();
+    setInterval("autoMove()", 10);
+});
+</script>
+</head>
+<body onkeydown="space()">
+</body>
+</html>
