@@ -15,6 +15,7 @@
 
 }
 </style>
+<script src="../js/lib.js"></script>
 <script>
 var box1;
 var box2;
@@ -38,7 +39,7 @@ function init(){
     box2.style.position = "absolute";
     box2.style.left = 600+"px";
     box2.style.top = 200+"px";
-    box2.style.background = "red";
+    box2.style.background = "blue";
     box2.style.width = 100+"px";
     box2.style.height = 100+"px";
     box2.style.color = "white";
@@ -52,37 +53,21 @@ function drag(){
         log(box1, parseInt(box1.style.left),parseInt(box1.style.top));
         collisionCheck(box1, box2);
     }
+    if(collisionCheck(box1, box2)){
+        box2.style.background = "red";
+    }else{
+        box2.style.background = "blue";
+    }
 }
 
 //한 번 누르면 들고 다니고, 또 한 번 누르면 내려 놓게
+
+
+
 function take(){
     flag = !flag;
 }
 
-//두 물체간, 충돌 여부를 판단해주는 함수
-function collisionCheck(obj1, obj2){
-    //왼쪽 상단만 체크
-    var x1 = parseInt(obj1.style.left);
-    var y1 = parseInt(obj1.style.top);
-    var w1 = parseInt(obj1.style.width);
-    var h1 = parseInt(obj1.style.height);
-
-    var x2 = parseInt(obj2.style.left);
-    var y2 = parseInt(obj2.style.top);
-    var w2 = parseInt(obj2.style.width);
-    var h2 = parseInt(obj2.style.height);
-
-    
-    if((x1+w1) > x2 && (y1+h1) > y2 && (x1+w1) < (x2+w2) && (y1+h1) < (y2+h2)){
-        console.log("좌쪽 상단 충돌~");
-    }else if(y1 < (y2+h2) && (x1+w1) > x2 && y1 > y2 && (x1+w1) < (x2+w2)){
-        console.log("좌쪽 하단 충돌~");
-    }else if(x1 < (x2+w2) && (y1+h1) > y2 && (y1+h1) < (y2+h2) && x1 > x2 ){
-        console.log("우측 상단 충돌~");
-    }else if(y1 < (y2+h2) && x1 < (x2+w2) && y1 > y2 && x1 > x2){
-        console.log("우측 하단 충돌~");
-    }
-}
 
 function log(obj, x, y){
     obj.innerText = "x : "+x+"y : "+y;

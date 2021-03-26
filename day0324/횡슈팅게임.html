@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Document</title>
+<title>뱅기겜</title>
 <style>
 *{
     margin: 0px;
@@ -14,7 +14,7 @@
 #wrapper{
     width: 100%;
     height: 600px;
-    background: url("./image/game_bg.jpg");
+    background: url("./image/bg.jpg");
     position: relative;
     overflow: hidden;
 }
@@ -22,6 +22,7 @@
 #info{
     background: yellow;
     opacity: 0.5;
+    position: relative;
 }
 
 </style>
@@ -29,20 +30,39 @@
 <script src="./Plane.js"></script>
 <script src="./Bullet.js"></script>
 <script src="./Enemy.js"></script>
+<script src="./Hp.js"></script>
+<script src="./Item.js"></script>
+<script src="./ItemRole.js"></script>
 <script>
 var wrapper;
 var bgX = 0; //배경 처리
 var plane; //주인공 제어
 var bulletAr = []; //총알 배열
 var enemyAr = []; //적군 배열
+var hpAr = []; //체력 배열
+var roleAr = [];//아이템의 역할 배열
+var itemSrc = ["./image/candy1.png", "./image/candy2.png","./image/candy3.png","./image/candy4.png", "./image/candy.png"]; //생성된 아이템을 받아놓을 배열
 var enImgAr = ["./image/e1.png", "./image/e2.png", "./image/e3.png", "./image/e4.png", "./image/e5.png"];
+var bulletSrc = ["./image/ball.png", "./image/missile1.png", "./image/missile2.png"];
 var info;
-var cnt = 0;
+var itemCnt = 0;
+var enemyCnt = 0;
+var itemAr = [];//생성된 아이템 저장
+var score = 0;
+var weaponIndex = 0;
+var si;
 
 function init(){
     wrapper = document.getElementById("wrapper");
     info = document.getElementById("info");
     createHero();
+    createHp();
+
+    //적군 등장
+    createEnemy();
+    
+    //아이템 정보 생성
+    createItemRole();
     
     //body태그에 키보드 이벤트 연결
     document.body.addEventListener("keydown", function(){
@@ -58,7 +78,7 @@ function pressDown(){
     var key = event.keyCode;
     //좌우상하
     
-    switch(key){
+    switch(key){     
         case 39: plane.velX = 5; break;
         case 37: plane.velX = -5; break;
         case 40: plane.velY = 5; break;
@@ -79,8 +99,15 @@ function pressUp(){
 }
 
 function fire(){
-    bullet = new Bullet(wrapper, "./image/ball.png", 25, 25, plane.x+plane.width, plane.y, 10, 0);
+    bullet = new Bullet(wrapper, bulletSrc[weaponIndex], 25, 25, plane.x+plane.width, plane.y, 10, 0);
     bulletAr.push(bullet);
+}
+
+function createHp(){
+    for(var i = 0; i < 5; i++){
+        var hp = new Hp(info, "./image/hp.png", 20, 20, i*35, 0);
+        hpAr.push(hp);
+    }
 }
 
 function createHero(){
@@ -89,10 +116,25 @@ function createHero(){
 }
 
 function createEnemy(){
-    
-    var enemy = new Enemy(wrapper, enImgAr[getRandom(5)], 60, 40, 1600, (getRandom(7)+1)*50, -2, 0);
+    var enemy = new Enemy(wrapper, enImgAr[getRandom(5)], 60, 40, screen.width, (getRandom(7)+1)*50, -2, 0);
     enemyAr.push(enemy);
     //container, src, width, height, x, y, velX, velY
+}
+
+//아이템의 역할 생성
+function createItemRole(){
+    for(var i = 0; i < itemSrc.length; i++){
+        var itemRole = new ItemRole(i, itemSrc[i]);
+        roleAr.push(itemRole);
+    }
+}
+
+//아이템 등장(랜덤 등장)
+function createItem(){
+    for(var i = 0; i < itemSrc.length; i++){
+        var item = new Item(roleAr[i], wrapper, 35, 35, screen.width+getRandom(100), (getRandom(8)+1)*100, -3, 0);
+        itemAr.push(item);
+    }
 }
 
 //배경이 흘러가는 효과
@@ -103,69 +145,68 @@ function bgEffect(){
 
 function gameLoop(){
     bgEffect(); //배경 움직임
-    log(); //게임의 정보
     plane.tick(); //물리량 변화
     plane.render(); //그래픽 처리
-    cnt++;
-    if(cnt%200 == 0){
+    enemyCnt++;
+    itemCnt++;
+    if(enemyCnt%50 == 0){
         createEnemy();
+    }
+    if(itemCnt%500==0){
+        createItem();
     }
     for(var i = 0; i < bulletAr.length; i++){
         bulletAr[i].render();
         bulletAr[i].tick();
     }
-
+    
     for(var i = 0; i < enemyAr.length; i++){
         enemyAr[i].render();
         enemyAr[i].tick();
     }
+
+    for(var i = 0; i < itemAr.length; i++){
+        itemAr[i].render();
+        itemAr[i].tick();
+    }
+    log(); //게임의 정보
 }
 
 //각종 실시간 정보를 출력할 함수
 function log(){
     var str = "총알갯수: "+bulletAr.length;
     str = str + ", 적군수:"+enemyAr.length;
-    info.innerText = str;
+    str = str + ", 점수:"+score;
+
+    document.getElementById("status").innerText = str;
 }
 
-function collisionCheck(obj1, obj2){
-    //왼쪽 상단만 체크
-    var x1 = parseInt(obj1.x); 
-    var y1 = parseInt(obj1.y);
-    var w1 = parseInt(obj1.width);
-    var h1 = parseInt(obj1.height);
-
-    var x2 = parseInt(obj2.x);
-    var y2 = parseInt(obj2.y);
-    var w2 = parseInt(obj2.width);
-    var h2 = parseInt(obj2.height);
-
-    
-    if((x1+w1) > x2 && (y1+h1) > y2 && (x1+w1) < (x2+w2) && (y1+h1) < (y2+h2)){
-        console.log("좌쪽 상단 충돌~");
-        return true;
-    }else if(y1 < (y2+h2) && (x1+w1) > x2 && y1 > y2 && (x1+w1) < (x2+w2)){
-        console.log("좌쪽 하단 충돌~");
-        return true;
-    }else if(x1 < (x2+w2) && (y1+h1) > y2 && (y1+h1) < (y2+h2) && x1 > x2 ){
-        console.log("우측 상단 충돌~");
-        return true;
-    }else if(y1 < (y2+h2) && x1 < (x2+w2) && y1 > y2 && x1 > x2){
-        console.log("우측 하단 충돌~");
-        return true;
+function endGame(){
+    if(hpAr.length == 0){
+        clearInterval(si);
+        var div = document.createElement("div");
+        div.style.fontSize = "200px";
+        div.style.textAlign = "center";
+        div.style.color = "#ffffff";
+        div.style.fontWeight = "bold";
+        div.style.height = 600+"px";
+        div.innerHTML = "GAME OVER<br><a href=\"javascript: location.reload()\">Retry</a>";
+        wrapper.removeChild(plane.img);
+        wrapper.appendChild(div);
     }
-    return;
 }
 
 window.addEventListener("load", function(){
     init();
-    setInterval("gameLoop()", 10);
+    si = setInterval("gameLoop()", 10);
 });
 </script>
 </head>
 <body>
     <div id="wrapper">
-        <div id="info">게임의 대한 정보</div>
+        <div id="info">
+            <div id="status" style="margin-left: 180px;">게임의 대한 정보</div>
+        </div>
     </div>
 </body>
 </html>

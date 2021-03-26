@@ -33,6 +33,32 @@ class Plane{
             this.x = 0;
         }
 
+        for(var i = 0; i < enemyAr.length; i++){
+            if(collisionCheck(this.img, enemyAr[i].img)){
+                removeObj(info, hpAr[hpAr.length-1].img, hpAr, hpAr.length-1);
+                removeObj(this.container, enemyAr[i].img, enemyAr, i);
+                endGame();
+            }
+        }
+
+
+
+         /*
+        사탕 1 : 무기를 미사일로 전환
+        사탕 2 : 다른 무기로 전환
+        사탕 3 : hp 추가
+        사탕 4 : 속도 up
+        사탕 5 : 총알 두 발씩 발사
+        */
+        for(var i = 0; i < itemAr.length; i++){
+            if(collisionCheck(this.img, itemAr[i].img)){
+                removeObj(this.container, itemAr[i].img, itemAr, i);
+                
+                weaponIndex = 2;
+            }
+        }
+
+
         if(this.x >= screen.width-this.width){
             this.x = screen.width - this.width;
         }

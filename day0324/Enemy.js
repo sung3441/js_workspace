@@ -1,5 +1,4 @@
 class Enemy{
-
     constructor(container, src, width, height, x, y, velX, velY){
         //멤버변수 (객체와 생명을 같이 하는 변수)
         this.container = container;
@@ -25,8 +24,10 @@ class Enemy{
     tick(){
         this.x += this.velX;
         this.y += this.velY;
-        if(this.x >= screen.width){
-            removeObj(this.container, this.img, bulletAr, bulletAr[bulletAr.indexOf(this)])
+        if(this.x <= 0){
+            removeObj(this.container, this.img, enemyAr, enemyAr.indexOf(this));
+            removeObj(info, hpAr[hpAr.length-1].img, hpAr, hpAr.length-1);
+            endGame();
         }
 
     }

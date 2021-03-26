@@ -17,7 +17,7 @@ class Bullet{
         this.img.style.height = this.height+"px";
         this.img.style.left = this.x+"px";
         this.img.style.top = this.y+"px";
-        this.img.style.position = "absolute";
+          this.img.style.position = "absolute";
         
         this.container.appendChild(this.img);
     }
@@ -26,18 +26,18 @@ class Bullet{
         this.x += this.velX;
         this.y += this.velY;
         if(this.x >= screen.width){
-            removeObj(this.container, this.img, bulletAr, bulletAr[bulletAr.indexOf(this)])
-        }else{
-            for(var i =0; i < enemyAr.length; i++){
-                if(collisionCheck(this, enemyAr[i])){    
-                    removeObj(this.container, this.img, bulletAr, bulletAr[bulletAr.indexOf(this)]);
-                    removeObj(wrapper, enemyAr[i].img, enemyAr, bulletAr[bulletAr.indexOf(enemyAr[i])]);
-                
-                }
+            removeObj(this.container, this.img, bulletAr, bulletAr.indexOf(this))
+        }
+        for(var i =0; i < enemyAr.length; i++){
+            if(collisionCheck(this.img, enemyAr[i].img)){    
+                //이런 등시새끼 인덱스 올 자리에 인덱스가 아니라 요소를 넘겨줬었네
+                //진짜 답없다 ;; 잊지말자 매개변수;;;;
+                removeObj(this.container, this.img, bulletAr, bulletAr.indexOf(this));
+                removeObj(this.container, enemyAr[i].img, enemyAr, i);
+                score += 10;
             }
         }   
     }
-
     render(){
         this.img.style.left = this.x+"px";
         this.img.style.top = this.y+"px";
