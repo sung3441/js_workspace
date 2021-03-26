@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>모자이크</title>
+<script src="../js/lib.js"></script>
+<script src="../js/Rect.js"></script>
+<script>
+var container;
+var cellSize = 100; //셀 하나당 너비, 높이는 100으로 고정
+var r = 10; //행
+var c = 10; //열 
+var rectAr = [];
+var rectBg = ["red", "yellow", "orange", "green", "blue", "navy", "purple"];
+var scoreBoard;
+var input;
+var rCnt = 0;
+var cCnt = 0;
+var score = 100;
+
+function init(){
+    container = document.createElement("div");
+    container.style.width = cellSize*c+"px";
+    container.style.height = cellSize*r+"px";
+    container.style.margin = "auto";
+    container.style.backgroundColor = "yellow";
+    container.style.position = "relative";
+    container.style.backgroundImage = "url(../image/catFace.png)"
+    container.style.backgroundSize = (c*cellSize)+"px"+(r*cellSize)+"px";
+    container.style.border = "solid 1px black";
+
+    document.body.appendChild(container);
+
+    createRect();
+    createScore();
+    createInput();
+}
+
+function createRect(){
+        //container, width, height, x, y, bg
+    if(rCnt < r && cCnt < c){
+        var rect = new Rect(container, cellSize, cellSize, cellSize*cCnt, cellSize*rCnt, rectBg[getRandom(rectBg.length)]);
+        cCnt++;
+        if(cCnt == c){
+            cCnt = 0;
+            rCnt++;
+        }
+        rectAr.push(rect);
+    }
+}
+    
+function rectClick(rect){
+    rect.style.opacity = 0.2;
+    score -= 5;
+    scoreBoard.innerText = score+"점";
+
+}
+
+function createScore(){
+    scoreBoard = document.createElement("div");
+    scoreBoard.style.width = 600+"px";
+    scoreBoard.style.height = 300+"px";
+    scoreBoard.style.backgroundColor = "red";
+    scoreBoard.style.backgroundImage = "url(../image/scoreBoard.png)";
+    scoreBoard.style.backgroundSize = 600+"px"+300+"px";
+    scoreBoard.style.margin = "auto";
+    scoreBoard.style.backgroundRepeat = "repeat-x";
+    scoreBoard.innerText = score+"점";
+    scoreBoard.style.textAlign = "center";
+    scoreBoard.style.fontSize = 110+"px";
+    scoreBoard.style.fontWeight = "bold";
+    scoreBoard.style.paddingTop = 80+"px";
+    scoreBoard.style.boxSizing = "border-box";
+
+    document.body.appendChild(scoreBoard);
+}
+
+function createInput(){
+    input = document.createElement("input");
+    input.style.height = 200+"px";
+    input.style.width = 300+"px";
+
+    document.body.appendChild(input);
+
+}
+
+
+window.addEventListener("load", function(){
+    init();
+    setInterval("createRect()", 50)
+
+});
+</script>
+</head>
+<body>
+</body>
+</html>
