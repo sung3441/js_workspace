@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<style>
+body{margin: 0px;}
+
+#wrapper{
+    margin: auto;
+    overflow: hidden;
+    width: 1500px;
+    height: 900px;
+    background: url(../image/bg.jpg);
+    background-size: 1500px 900px;
+    position: relative;
+
+}
+
+#scoreBoard{
+    position: absolute;
+    font-size: 80px;
+    font-weight: bold;
+    width: 100%;
+    height: 100px;
+    color: white;
+    background: black;
+    text-align: right;
+    opacity: 0.5;
+
+}
+</style>
+<script src="../../js/lib.js"></script>
+<script src="./Car.js"></script>
+<script src="./Police.js"></script>
+<script>
+var wrapper;
+var scoreBoard;
+var width = 50;
+var height = 50;
+
+//나의 속도
+var velX = 0;
+var velY = 0;
+
+//경찰차의 속도
+var policeVelX = 3;
+var policeVelY = 3;
+//내 차
+var car;
+//경찰차
+var police;
+
+//경찰차가 바로 시작안하고 일정 시간 후에 출발하게 하는 제어장치
+var startCnt = 0;
+var score = 0;
+var si;
+
+function init(){
+    wrapper = document.getElementById("wrapper");
+    scoreBoard = document.getElementById("scoreBoard");
+    createCar();
+    createPolice();
+
+}
+
+
+//내가 조종할 차 만들기
+//wrapper, src, width, height, velX, velY
+function createCar(){
+    
+    car = new Car(wrapper, "../image/supercarDown.png", width, height, velX, velY);
+}
+
+//경찰차 만들기
+function createPolice(){
+    
+    police = new Police(wrapper, "../image/policecarDown.png", width, height, policeVelX, policeVelY, );
+}
+
+
+
+//방향키 누르면~
+function keyDown(){
+    switch(event.keyCode){
+        case 37: car.velX = -5; car.src = "../image/supercarLeft.png"; console.log("zz");break;
+        case 38: car.velY = -5; car.src = "../image/supercarUp.png"; break;
+        case 39: car.velX = 5; car.src = "../image/supercarRight.png";  break;
+        case 40: car.velY = 5; car.src = "../image/supercarDown.png"; break;
+    }    
+}
+
+//방향키에서 손 떼면~
+function keyUp(){
+    switch(event.keyCode){
+        case 37: car.velX = 0; break;
+        case 38: car.velY = 0; break;
+        case 39: car.velX = 0;  break;
+        case 40: car.velY = 0; break;
+    }    
+    
+}
+
+//게임 루프
+function gameLoop(){
+    score++;
+    car.tick();
+    car.render();
+    startCnt++;
+    if(startCnt > 50){
+        police.moveX();
+        police.moveY();
+
+    }
+
+    scoreBoard.innerText = score+"점";
+
+}
+
+
+
+window.addEventListener("load", function(){
+    init();
+    si = setInterval("gameLoop()", 10);
+});
+</script>
+</head>
+<body onkeydown="keyDown()" onkeyup="keyUp()">
+    <div id="wrapper">
+        <div id="scoreBoard">0</div>
+    </div>
+</body>
+</html>
