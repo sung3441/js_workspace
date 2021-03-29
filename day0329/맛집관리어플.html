@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<style>
+body{margin: 0px;}
+
+#wrapper{
+    margin: auto;
+    overflow: hidden;
+    width: 1200px;
+    height: 700px;
+    background: yellow;
+
+
+}
+
+#side{
+    width: 200px;
+    height: 100%;
+    background: ivory;
+    float: left;
+    box-sizing: border-box;
+}
+
+#side *{
+    width: 95%;
+    margin-top: 10px;
+
+}
+
+#side input[type = "text"]{
+    height: 20px;
+
+}
+
+#side textarea{
+    height: 100px;
+
+}
+
+#content{
+    width: 1000px;
+    height: 100%;
+    float: left;
+    background: red;
+
+}
+
+#side img{
+    height: 200px;
+
+}
+
+</style>
+<script>
+var content;
+var side;
+var pic;
+var myCenter; //현재 맵의 중심점
+var lati, ingi;
+var googleMap;
+var imgSelect;
+var opAr = [];
+
+var storeList = {
+    "stores" : [
+        {
+            "src" : "./store/fripan.jpg",
+            "name" : "프라이팬"
+        },
+        {
+            "src" : "./store/italy.jpg",
+            "name" :  "이태리"
+        },
+        {
+            "src" : "./store/ricecake.jpg",
+            "name" : "떡볶이"
+        },
+        {
+        "src" : "./store/samgob.jpg",
+            "name" : "삼곱집"
+        },
+        {
+            "src" : "./store/woori.jpg",
+            "name" : "우리식당"
+        }
+    ]
+};
+
+
+function init(){
+    content = document.getElementById("content");
+    side = document.getElementById("side");
+    lati = document.getElementById("lati");
+    lngi = document.getElementById("lngi");
+    imgSelect = document.getElementById("imgSelect");
+    pic =document.getElementById("pic");
+
+    //위도와 경도 부분만 변수로 빼서 사용
+    myCenter  = new google.maps.LatLng(37.57592857757655 , 126.97693409556554);
+
+    //맵에 중심점에 대한 좌표 및 줌 확대 비율
+    var mapProp = {
+        "center" : myCenter,
+        "zoom" : 18
+    };
+
+    //설정 정보를 구글맵 객체에 적용
+    googleMap = new google.maps.Map(content, mapProp);
+
+    //마커 생성하기
+    createMarker(myCenter);
+
+    //이미지 목록 생성하기
+    createImg();
+
+    
+}
+
+//선택할 이미지 목록 생성
+function createImg(){
+    //in은 인덱스를 반환하지만, of는 안에 들어있는 요소를 반환한다.
+    for(var index of storeList.stores){
+        
+        var op = document.createElement("option");
+        
+        op.value = index.src;
+        op.text = index.name;
+
+        imgSelect.add(op)//생성된 옵션을 select박스에 붙이기
+    }
+}
+
+//단일 등록
+function apply(){
+    //위도와 경도를 변경해서 마커 찍기.
+    myCenter = new google.maps.LatLng(lati.value, lngi.value);
+    //위치값, 이미지주소, 상호명, 가게 리뷰
+    createMarker(myCenter, imgSelect.value, document.getElementById("store_name").value, document.getElementById("store_detail").value);
+    alert("등록완료");
+}
+
+
+//제이슨을 활용한 일괄등록
+function applyAll(){
+    //text area에 작성된 문자열 내의 json 표기를 실제 json 객체화 시키기;
+    //그러기 위해서 문자열을 제거하고 json으로 해석해야한다, 이때 사용할 수 있는 내장 객체를사용
+   var json = JSON.parse(document.getElementById("dump").value);
+    for(path of json.storeList){
+        myCenter = new google.maps.LatLng(path.latlng.lat, path.latlng.lng);
+        createMarker(myCenter, path.img, path.name, path.comment);
+    }
+    alert("일괄등록완료");
+}
+
+
+//마커를 생성하고 맵에 부착하는 함수
+//매개변수 => 위도,경도 / 이미지 주소/ 상호명/ 리뷰
+function createMarker(center, src, name, review){
+    var marker = new google.maps.Marker({
+        "position" : center
+    });
+    marker.setMap(googleMap);
+
+    //클릭했을 때 정보 뜨게 표시
+    google.maps.event.addListener(marker,'click',function(){
+        //카메라의 중심점을 현재 마커로 이동
+        googleMap.setCenter(marker.getPosition());
+        //인포메이션 윈도우 띄우기 
+        //클릭을 했을 때 동작을 하는 이벤트면 name과 src 등의 변수도
+        //인식을 못하는게 맞지 않나요..?왜 동작이 되는지 모르겠습니다.
+        var tag = "<h3>"+name+"</h3>";
+        tag += "<img src=\""+src+"\" width = '100px'><p>";
+        tag += review;
+        var infowindow = new google.maps.InfoWindow({
+            content: tag
+        });
+        infowindow.open(googleMap, marker);    
+    });
+}
+
+
+function preview(){
+    console.log(imgSelect.value);
+    pic.src = imgSelect.value;
+
+}
+
+//체크를 했을 때 텍스트 상자 뜨게 하기.
+function registByJson(){
+    var vision = (document.getElementById("ch").checked)? "block" : "none";
+    document.getElementById("dump").style.display = vision;
+
+}
+
+
+</script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="side">
+            <input type="text" placeholder="상호를 입력.." id="store_name">
+            <textarea placeholder="가게 리뷰" id="store_detail"></textarea>
+            <!-- 기존에 선택한 옵션과는 다른 옵션을 선택했을 때 즉, 선택 값이 바뀌었을 때 감지 -->
+            <select id="imgSelect" onchange="preview()">
+                <option value="">이미지선택</option>
+            </select>
+            <img id="pic" src="../image/catFace.png">
+            일괄등록 : <input type="checkbox" onclick="registByJson()" id="ch">
+            <textarea placeholder="json 데이터 입력" id="dump" style="display: none;"></textarea>
+            <input type="text" value="37.57283844029162" placeholder="위도" id="lati">
+            <input type="text" value="126.97687954827418" placeholder="경도" id="lngi">
+            <button onClick="(document.getElementById('ch').checked)? applyAll():apply()">등록</button>
+
+
+        </div>
+        <div id="content"></div>
+    </div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5TAmy09qagdM9HNFD-MsgvivYgn9tZPU&callback=init"></script>
+</body>
+</html>
