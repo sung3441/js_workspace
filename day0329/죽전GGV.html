@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>죽전 GGV 마블관입니다.</title>
+<style>
+#wrapper{
+    width:1000px;
+    height:800px;
+    margin: auto;
+    position: relative;
+}
+#movie_title{
+    width:100%;
+    height:100px;
+    background:brown;
+    overflow: hidden;
+}
+#content_wrapper{
+    width:100%;
+    height:550px;
+    background: white;
+    overflow: hidden;
+}
+#pic{
+    width:500px;
+    height:100%;
+    background:red;
+    float:left;
+}
+
+#detail{
+    text-align: center;
+    padding-top: 0px;
+    width:500px;
+    height:100%;
+    background:black;
+    float:left;
+}
+#navi{
+    width:100%;
+    height:50px;
+    background:brown;
+    position: relative;
+}
+
+#thumb{
+    width:100%;
+    height:100px;
+    background: black;
+    position: relative;
+    overflow: hidden;
+}
+
+#logo{
+    font-size: 70px;
+    font-weight: bold;
+    color: white;
+    padding-left: 10px;
+    width: 300px;
+    height: 100%;
+    float: left;
+    box-sizing: border-box;
+}
+
+#titleBox{
+    font-size: 70px;
+    font-weight: bold;
+    color: white;
+    width: 700px;
+    height: 100%;
+    float: left;
+    box-sizing: border-box;
+
+}
+
+#pre{
+    left: 1px;
+    font-size: 38px;
+    background-color: brown;
+    border-radius: 10%;
+    position: absolute;
+    font-weight: bold;
+    border: none;
+    color: white;
+}
+
+#next{
+    right: 0px;
+    font-size: 38px;
+    background-color: brown;
+    border-radius: 10%;
+    position: absolute;
+    font-weight: bold;
+    border: none;
+    color: white;   
+}
+
+</style>
+<script src="../js/marvel.js"></script>
+<script>
+var wrapper;
+var movieTitle;
+var contentWrapper;
+var navi;
+var box;
+var pic;
+var rect;
+var title;
+var titleMsg;
+//이미지를 눌러야 테두리 상자가 움직임
+var moveFlag = false;
+var btFlag = true;
+var targetX = 0;
+var op = 0;
+var bannerTarget = 0;
+var logoCnt = 0;
+var key;
+var a = 1;
+
+function init(){ 
+    //이미지가 들어가서 움직일 박스의 설정
+    setBox();
+    createThumb();
+    //이미지 선택 시 움직이는 사각형 생성
+    createRect();
+    createMsg();
+    getDetail(movies.marvel[0]);
+}
+
+//썸네일용 이미지 박스
+function setBox(){
+    box = document.getElementById("box");
+    box.style.position = "absolute";
+    box.style.width = (100*20)+"px";
+    box.style.height = 100+"px";
+    box.style.left = 0+"px";
+    box.style.top = 0+"px";
+
+}
+
+function createRect(){
+    rect = document.createElement("div");
+    rect.style.position = "absolute";
+    rect.style.width = 100+"px";
+    rect.style.height = 100+"px";
+    rect.style.position = 100+"px";
+    rect.style.boxSizing = "border-box";
+    rect.style.border = 5+"px solid yellow";
+    rect.style.left = 0+"px";
+    rect.style.top = 0+"px";
+    
+    var thumb = document.getElementById("thumb");
+    thumb.appendChild(rect);
+}
+
+//썸네일 만들기
+function createThumb(){
+    for(index in movies.marvel){
+        var img = document.createElement("img");
+        var marvel = movies.marvel[index];
+        img.src = marvel.url;
+        img.style.width = 90+"px";
+        img.style.height = 90+"px";
+        img.style.position = "absolute";
+        img.style.left = 5+(index*100)+"px";
+        img.style.top = 5+"px";
+
+        //이미지 클릭 시 이벤트 호출
+        img.addEventListener("click", function(){
+            //투명도 조절
+            op = 0;
+            //내가 누른 객체의 정보가 marvel변수에 담긴다.
+            var marvel = returnIndex(this);
+            key = marvel;
+            setRect(parseInt(this.style.left)-5);
+            getDetail(marvel);
+            setMsg(marvel);
+        });
+        
+        box.appendChild(img);//썸네일 영역에 이미지 부착
+    }
+}
+
+//내가 누른 사진의 객체를 반환해주는 함수
+function returnIndex(img){
+    for(path of movies.marvel){
+        var marvel = path;
+        if(marvel.url == img.src){
+            return path;
+        }
+    }
+}
+
+function createMsg(marvel){
+    var titleBox = document.getElementById("titleBox");
+    titleMsg = document.createElement("div");
+    titleMsg.style.position = "absolute";
+    titleMsg.style.width = 700+"px";
+    titleMsg.style.height = 100+"px";
+    titleMsg.style.left = 1200+"px";
+    titleMsg.style.top = 0+"px";
+    titleMsg.style.color = "white";
+    titleMsg.style.fontSize = 50+"px";
+    titleMsg.style.paddingTop = 16+"px";
+    
+    titleMsg.innerText = "입니다.";
+
+    titleBox.appendChild(titleMsg);
+
+}
+
+//날라오는 메세지 움직이기
+function msgMove(){
+    if(!(parseFloat(titleMsg.style.left) <= (330+0.01) && parseFloat(titleMsg.style.left) >= (330-0.01))){
+        titleMsg.style.left = parseFloat(titleMsg.style.left)+(0.1*(330-parseFloat(titleMsg.style.left)))+"px";
+    }
+}
+
+//날라오는 메세지 설정
+function setMsg(marvel){
+    titleMsg.innerText = marvel.title;
+    titleMsg.style.left = 1000+"px";
+
+}
+
+//이미지 클릭시 상자의 설정 변경
+function setRect(n){
+    //상자의 목표지점
+    targetX = (btFlag)? n : n-1000;
+    //상자를 움직이게하는 스위치
+    moveFlag = true;
+}
+
+
+//이미지테두리 움직이기
+function moveRect(){
+    if(moveFlag){  
+        //여기서 타겟 x를 매개변수로 받아오면 다음 반복 시 언디파인드 오류 발생!!
+        var x = parseFloat(rect.style.left);
+        rect.style.left = x+(0.1*(targetX-x))+"px";
+        //무한 반복을 막기 위해 오차범위 내로 들어가면 플래그 false;
+        if(x <= (targetX+0.01) && x >= (targetX-0.01)){
+            moveFlag = false;
+        }
+    }
+}
+
+//영화 1건에 대한 상세 내용 보기
+function getDetail(obj){
+
+    //큰 사진 보여주기
+    pic = document.getElementById("pic");
+    pic.style.background = "url("+obj.url+")";
+    pic.style.backgroundSize = 500+"px "+550+"px";
+    pic.style.opacity = op;
+    
+
+    var msg = "";
+    msg += "제목 : "+obj.title+"<br><br>";
+    msg += "부제목 : "+obj.phase+"<br><br>";
+    msg += "개봉년도 : "+obj.release_year+"<br><br>";
+    msg += "상영시간 : "+obj.running_time+"<br><br>";
+    msg += "제작비 : "+obj.budget+"<br><br>";
+    msg += "총수익 : "+obj.gross+"<br><br>";
+    
+    var detail = document.getElementById("detail");
+    detail.style.color = "white";
+    detail.style.fontSize = 30+"px";
+    detail.innerHTML = msg;
+}
+
+//배경 이미지 투명도 조절
+function opaCity(){
+    if(op <= 1){ 
+        op += 0.03;
+        pic.style.opacity = op;
+    }
+}
+
+//좌우 버튼 설정
+function bt(){
+    bannerTarget = (btFlag)? -1000 : 0;
+    btFlag = !btFlag;
+}
+
+function moveBanner(){
+    if(!(parseFloat(box.style.left) <= (bannerTarget+0.01) && parseFloat(box.style.left) >= (bannerTarget-0.01))){
+        box.style.left = parseFloat(box.style.left)+(0.1*(bannerTarget-parseFloat(box.style.left)))+"px";
+    }
+}
+
+function logoColor(){
+    logoCnt += a;
+    document.getElementById("logo").style.color = "rgb(255,"+logoCnt+", "+logoCnt+")";
+    if(logoCnt == 255 || logoCnt == 0 ){
+        a *= -1
+    }
+}
+
+//계속 돌아가는 친구
+function loop(){
+    moveRect();
+    opaCity();
+    msgMove();
+    moveBanner();
+    logoColor();
+}
+
+window.addEventListener("load", function(){
+    init();
+    setInterval("loop()", 10);
+});
+</script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="movie_title">
+            <div id="logo" onclick="location.href='./영화관지도.html'">죽전GGV</div>
+            <div id="titleBox"></div>
+        </div>
+        <div id="content_wrapper">
+            <div id="pic"></div>
+            <div id="detail"></div>
+        </div>
+        <div id="navi">
+            <button id="pre" onclick="bt()">pre</button>
+            <button id="next" onclick="bt()">next</button>
+        </div>
+        <div id="thumb">
+            <div id="box"></div>
+        </div>
+    </div>
+</body>
+</html>

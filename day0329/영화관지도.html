@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GGV</title>
+<style>
+#wrapper{
+    width: 1200px;
+    height: 900px;
+    background: red;
+    margin: auto;
+
+}
+
+#search-area{
+    width: 100%;
+    height: 100px;
+    background: rosybrown;
+    text-align: center;
+    padding-top: 25px;
+    box-sizing: border-box;
+}
+
+#search-area *{
+    font-size: 30px;
+}
+
+#content{
+    width: 100%;
+    height: 800px;
+    background: royalblue;
+
+}
+</style>
+<script>
+var myCenter;
+var googleMap;
+var content;
+var mapProp;
+var markerAr = [];
+var GGVList = {
+    "stores" : [
+        {
+            "src" : "./store/gangCgv.png",
+            "name" : "강남",
+            "index" : 0,
+            "lat" : 37.50187360761239,
+            "lng" : 127.0263189981199
+        },
+        {
+            "src" : "./store/gCgv.png",
+            "name" :  "구리",
+            "index" : 1,
+            "lat" : 37.60196808370248,
+            "lng" : 127.14199205394357
+        },
+        {
+            "src" : "./store/iCgv.png",
+            "name" : "인천",
+            "index" : 2,
+            "lat" : 37.45439866361932,
+            "lng" : 126.70121927578725
+        },
+        {
+            "src" : "./store/pCgv.png",
+            "name" : "포천",
+            "index" : 3,
+            "lat" : 37.829675682845725,
+            "lng" : 127.1498059116976
+        },
+        {
+            "src" : "./store/jCgv.png",
+            "name" : "죽전",
+            "index" : 4,
+            "lat" : 37.325445975636136,
+            "lng" : 127.10779891160963
+        }
+    ]
+};
+function init(){
+    content = document.getElementById("content");
+    myCenter  = new google.maps.LatLng(37.829675682845725 , 127.1498059116976);
+
+    //맵에 중심점에 대한 좌표 및 줌 확대 비율
+    mapProp = {
+        "center" : myCenter,
+        "zoom" : 10
+    };
+    googleMap = new google.maps.Map(content, mapProp);
+    createMarker();
+}
+
+function createMarker(){
+    for(path in GGVList.stores){
+        var ggv = GGVList.stores[path]
+        var center = new google.maps.LatLng(ggv.lat, ggv.lng);
+        var marker = new google.maps.Marker({
+            "position" : center,
+            "path" : ggv,
+            "index" : path
+        });
+        markerAr.push(marker);
+        marker.setMap(googleMap);
+        google.maps.event.addListener(marker,'click',function(){
+            googleMap.setZoom(15);
+            //카메라의 중심점을 현재 마커로 이동
+            googleMap.setCenter(markerAr[this.index].getPosition());
+            var tag = "<div style=\"text-align: center; font-size: 30px\">CGV "+this.path.name+"점</div>";
+            tag += "<img src=\""+this.path.src+"\" width = '300px'><p>";
+            tag += "<button style=\"margin-left: 70px\" onclick=\"ticket("+this.index+")\">GGV "+this.path.name+"점으로 이동</button>";
+            var infowindow = new google.maps.InfoWindow({
+                content: tag
+            });
+            infowindow.open(googleMap, markerAr[this.index]);    
+        });
+    }
+}
+
+//예매하러가기
+function ticket(n){
+    switch(n){
+        case 0: location.href="./강남GGV.html"; break;
+        case 1: location.href="./구리GGV.html"; break;
+        case 2: location.href="./인천GGV.html"; break;
+        case 3: location.href="./포천GGV.html"; break;
+        case 4: location.href="./죽전GGV.html"; break;
+    }
+}
+
+//검색 버튼
+function searchBt(){
+    var val = document.getElementById("search-navi").value;
+    for(var i = 0; i < GGVList.stores.length; i++){
+        if(val == GGVList.stores[i].name){
+            googleMap.setZoom(15);
+            googleMap.setCenter(markerAr[i].getPosition());
+            googleMap.setCenter(markerAr[i].getPosition());
+            var tag = "<div style=\"text-align: center; font-size: 30px\">CGV "+GGVList.stores[i].name+"점</div>";
+            tag += "<img src=\""+GGVList.stores[i].src+"\" width = '300px'><p>";
+            tag += "<button style=\"margin-left: 70px\" onclick=\"ticket("+i+")\">GGV "+GGVList.stores[i].name+"점으로 이동</button>";
+            var infowindow = new google.maps.InfoWindow({
+                content: tag
+            });
+            infowindow.open(googleMap, markerAr[i]);
+        }
+    }
+    document.getElementById("search-navi").value = "";
+}
+</script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="search-area">
+            <input type="text" id="search-navi" placeholder="지역명을 입력하세요.">
+            <button onclick="searchBt()">검색하기</button>
+        </div>
+        <div id="content"></div>
+    </div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5TAmy09qagdM9HNFD-MsgvivYgn9tZPU&callback=init"></script>
+</body>
+</html>
