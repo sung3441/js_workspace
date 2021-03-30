@@ -1,0 +1,29 @@
+<script>
+
+//데이트 객체 생성 시, 개발자가 생성자 메서드에 아무런 매개변수 값을
+//전달하지 않으면, 현재 날짜를 기본 정보로 가져온다.
+var d = new Date();
+var yoil = ["일", "월", "화", "수", "목", "금", "토"];
+
+
+console.log(d);
+console.log("올해는 : ", d.getFullYear()), "년";
+//달을 구할 때는 +1을 해줘야 같게 된다. 0~11로 취급되기 때문
+console.log("요번 달은 : ", d.getMonth()+1, "월");
+console.log("오늘 날짜는 : ", d.getDate(), "일");
+//요일 또한 월 처럼 0부터 시작 0요일은 Sunday 부터 시작.
+console.log("오늘 요일은 : ", selectYoil(d.getDay()), "요일");
+
+function selectYoil(n){
+    return yoil[n];
+}
+
+//현재 날짜가 아닌, 과거 또는 미래까지도 제어가능
+
+//년도 조작하기
+d.setFullYear(1994);
+d.setMonth(9);
+d.setDate(25);
+console.log(d);
+console.log("오늘 요일은 : ", selectYoil(d.getDay()), "요일");
+</script>

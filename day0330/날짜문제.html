@@ -1,0 +1,21 @@
+<script>
+var yoilAr = ["일", "월", "화", "수", "목", "금", "토"];
+
+var d = new Date();
+d.setFullYear(2015); //2015년
+d.setMonth(2); //3월
+d.setDate(25); //25일
+
+console.log(d);
+d.setDate(d.getDate()+100);
+console.log(d);
+
+
+var d2 = new Date();
+d2.setFullYear(2035);
+d2.setMonth(6);
+d2.setDate(1);
+console.log(yoilAr[d2.getDay()]);
+
+console.log(new Date(1950, 5, 25).getDay());
+</script>

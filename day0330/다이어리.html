@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<script src="../js/DateBox.js"></script>
+<script src="../js/lib.js"></script>
+<style>
+#navi{
+    width: 100%;
+    height: 100px;
+    text-align: center;
+    position: relative;
+}
+
+#navi span{
+    font-size: 60px;
+    font-weight: bold;
+    
+}
+
+#bt_prev{
+    position: absolute;
+    left: 0px;
+
+}
+
+#bt_next{
+    position: absolute;
+    right: 2px;
+}
+
+#bt_prev, #bt_next{
+    border: 0px;
+    font-size: 35px;
+    margin-top: 30px;
+}
+
+#day_area{
+    height: 100px;
+    width: 100%;
+
+}
+
+#date_area{
+    height: 600px;
+    width: 100%;
+
+}
+
+#memo_list{
+    width: 600px;
+    height: 800px;
+    float: left;
+    box-sizing: border-box;
+    background-size: 720px 830px;
+    background-position-x: -100px;
+    background-position-y: -5px;
+    background-repeat: no-repeat;
+    padding-top: 60px;
+    padding-left: 60px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+#wrap{
+    width: 1300px;
+    height: 1000px;
+    position: relative;
+    background: ivory;
+    overflow: hidden;
+    margin: auto;
+    border: 2px black solid;
+}
+
+#skin_area{
+    width: 100%;
+    height: 200px;
+    box-sizing: border-box;
+    clear: both;
+    overflow: hidden;
+}
+
+#onepice{
+    width: 325px;
+    height: 200px;
+    background-size: 325px 200px;
+    background-image: url(../image/roopy.jpg);
+    float: left;
+}
+
+#bonobono{
+    width: 325px;
+    height: 200px;
+    background-size: 325px 200px;
+    background-image: url(../image/bonobono.jpg);
+    float: left;
+}
+
+#dooly{
+    width: 325px;
+    height: 200px;
+    background-size: 325px 200px;
+    background-image: url(../image/dooly.jpg);
+    float: left;
+}
+
+#jjangu{
+    width: 325px;
+    height: 200px;
+    background-size: 325px 200px;
+    background-image: url(../image/jjangu.jpg);
+    float: left;
+}
+
+</style>
+<script>
+var wrapper;
+var cellSize = 100; //가로, 세로 모두 100.
+var dayAr = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
+var mmAr = ["Jun", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+var startYY;
+var startMM;
+var dateBoxAr = [];
+var dayBoxAr = [];
+var skinAr = ["url(../image/roopy.png)", "url(../image/bonobono2.jpg)", "url(../image/dooly.png)", "url(../image/jjangu.png)"];
+var memoSkinAr = ["url(../image/roopyBg.jpg)", "url(../image/bonobonoBg.png)", "url(../image/doolyBg.jpg)", "url(../image/jjanguBg.png)"];
+var skinColorAr = ["rgb(241, 129, 129)", "rgb(122, 124, 226)", "rgb(128, 230, 118)", " rgba(238, 247, 118, 0.911)"];
+var target = -325;
+var rect;
+
+function init(){
+    createWrapper();
+    //박스를 날짜로 채우는 함스들 보다 먼저 올라와 있어야 시작 년도와 월을 구할 수 있음.
+    setTitle(getCurrentDate());
+    createDays();
+    createDate();
+    createRect();
+
+    document.getElementById("memo_list").style.backgroundImage = "url(../image/memo.webp)";
+    //달력 제목으로 오늘 날짜를 기본적으로 출력하자
+}
+
+//각 월의 시작 요일을 알아야, 날짜의 시작 위치를 결정 짓는다..!
+function getFirstDayOfMonth(yy, mm){
+    //원리 : 각 월의 1일로 날짜를 조작한 후 해당 요일을 물어보자
+    var d = new Date(yy, mm, 1); //넘겨받은 매개변수로 날짜를 조작하기
+    return d.getDay(); //요일 반환하기
+}
+
+
+//각 월이 몇 일까지 있는지(5월 31일까지, 6월은 30일까지...구하기)
+//다음 달 1일의 -1일이 곧 마지막 날이 된다.
+//주의 함수 호출 시 7월 말이 궁금할 경우 매개변수로 8을 넘겨 줘야함
+function getLastDate(yy, mm){
+    var d = new Date(yy, mm, 0);
+    return d.getDate(); //말일 날짜 반환
+}
+
+//현재 날짜 구해오기
+function getCurrentDate(){
+    var d = new Date();
+    var yy = d.getFullYear();
+    startYY = yy;
+    var mm = d.getMonth();
+    //달에 1을 더하기 전에 옮겨 담기
+    startMM = mm;
+    //달은 0부터 시작이므로 1을 더해줘야 계산하기 용이 즉, 계산용이 아닌 출력용이다.
+    mm++;
+    mm = getZeroString(mm);
+    return yy+"년 "+mm+"월";
+}
+
+//달력이 들어갈 큰 상자
+function createWrapper(){
+    wrapper = document.getElementById("wrapper"); //document 객체의 createElement() 메서드
+    wrapper.style.height = 100+100+cellSize*6+"px";
+    wrapper.style.width = cellSize*7+"px";
+    wrapper.style.margin = "auto";
+    wrapper.style.backgroundColor = "ivory";
+    wrapper.style.overflow = "hidden";
+    wrapper.style.position = "relative";
+    wrapper.style.float = "left";
+    
+}
+
+//요일 박스 생성(일, 월, 화, 수....)
+function createDays(){
+    for(var i = 0; i < dayAr.length; i++){
+        var box = new DateBox(document.getElementById("day_area"), cellSize, cellSize, dayAr[i], "rgb(233, 187, 187)", dayAr[i]);
+        dayBoxAr.push(box);
+    } 
+}
+
+//날짜 박스 생성
+function createDate(){
+    var dd = 0;
+    for(var i = 0; i < dayAr.length*6; i++){
+        if(i >= getFirstDayOfMonth(startYY, startMM) && i < getLastDate(startYY, startMM+1)+getFirstDayOfMonth(startYY, startMM)){
+            //console.log(getLastDate(startYY, startMM+1));
+            dd++;
+            var dateBox = new DateBox(document.getElementById("date_area"), cellSize, cellSize, dd, "ivory", i);
+            dateBoxAr.push(dateBox);
+        }else{
+            var dateBox = new DateBox(document.getElementById("date_area"), cellSize, cellSize, "", "ivory", i);     
+            dateBoxAr.push(dateBox);
+        }
+        if(i%7 == 0){
+            dateBoxAr[i].chColor("red");
+        }
+    }
+}
+
+//달력의 날짜는 변경이 자주 일어나므로, 함수로 정의
+function setTitle(text){
+    document.getElementById("cal_title").innerText = text;
+}
+
+function setTitleYYMM(yy, mm){
+    document.getElementById("cal_title").innerText = yy+"년 "+getZeroString(mm)+"월";
+}
+
+
+function updateDate(){
+    //console.log("zz");
+    var dd = 0;
+    //console.log("마지막 값"+getLastDate(startYY, startMM+1));
+    for(var i = 0; i < dateBoxAr.length; i++){
+        //여기서 끝나는 값에는 시작값-1을 더해줘야 한다.
+        //즉, 3월이 31일까지 있다면 31번을 반복해야한다,.
+        //시작일이 수요일이라면 시작값은 3일테고 31번 반복하려면 끝값에 2를 더해줘야한다.
+        //2만 더하는 이유는 첫 시작은 0부터 하기 때문!!
+        if(i >= getFirstDayOfMonth(startYY, startMM) && i < getLastDate(startYY, startMM+1)+getFirstDayOfMonth(startYY, startMM)){
+            dd++;
+            //console.log(i);
+            dateBoxAr[i].text = dd;
+            dateBoxAr[i].update();
+        }else{
+            dateBoxAr[i].text = "";
+            dateBoxAr[i].update();
+        }
+    }
+    setTitleYYMM(startYY, startMM+1);
+    document.getElementById("memo_list").innerText = startYY+" "+mmAr[startMM]+" memo...";
+}
+
+//
+function setYYMM(n){
+    startMM += n;
+    if(startMM >= 12){
+        startMM = 0;
+        startYY += n;
+    }else if(startMM < 0){
+        startMM = 11;
+        startYY += n;
+    }
+    updateDate();
+}
+
+function memo(index){
+    var todo=prompt(index+"일 기록하기");
+    if(todo != "" && todo != null){
+        var result = document.getElementById("memo_list").innerText;
+        result +=  "\nDay"+index+" "+todo;
+        document.getElementById("memo_list").innerText = result;
+    }else{
+        alert("빈칸ㄴㄴ");
+    }
+}
+
+function skinCh(n){
+    for(var i = 0; i < dayBoxAr.length; i++){
+        dayBoxAr[i].bgUpdate(skinAr[n]);
+    }
+    document.getElementById("memo_list").style.backgroundImage = memoSkinAr[n];
+    wrapper.style.backgroundColor = skinColorAr[n];
+    target = n*325;
+}
+
+function createRect(){
+    rect = document.createElement("div");
+    rect.style.position = "absolute";
+    rect.style.width = 325+"px";
+    rect.style.height = 200+"px";
+    rect.style.position = 100+"px";
+    rect.style.boxSizing = "border-box";
+    rect.style.border = 7+"px solid red";
+    rect.style.left = target+"px";
+    rect.style.top = 800+"px";
+    
+    var skin_area = document.getElementById("skin_area");
+    skin_area.appendChild(rect);
+    
+}
+
+function moveRect(){    
+    rect.style.left = parseFloat(rect.style.left)+(0.1*(target-parseFloat(rect.style.left)))+"px";
+}
+
+window.addEventListener("load", function(){
+    init();
+    setInterval("moveRect()", 10);
+});
+</script>
+</head>
+<body>
+    <div id="wrap">
+        <div id="wrapper">
+            <div id="navi">
+                <button id="bt_prev" onclick="setYYMM(-1)">prev</button>
+                <span id="cal_title">2021년 03월</span>
+                <button id="bt_next" onclick="setYYMM(1)">next</button>
+            </div>
+            <div id="day_area"></div>
+            <div id="date_area"></div>
+        </div>
+        <div id="memo_list">2021 Mar memo...</div>
+        <div id="skin_area">
+            <div id="onepice" onclick="skinCh(0)"></div>
+            <div id="bonobono" onclick="skinCh(1)"></div>
+            <div id="dooly" onclick="skinCh(2)"></div>
+            <div id="jjangu" onclick="skinCh(3)"></div>
+        </div>
+    </div>
+</body>
+</html>
