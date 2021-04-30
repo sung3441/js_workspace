@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<style>
+
+#wrapper{
+    background-image: url(../../image/marioBg.jpg);
+    width: 1200px;
+    height: 900px;
+    overflow: hidden;
+    background-size: 1200px 900px;
+    position: relative;
+}
+body{margin: 0px;}
+</style>
+<script src="../../js/lib.js"></script>
+<script src="./box.js"></script>
+<script src="./Mario.js"></script>
+<script>
+var wrapper;
+var hero;
+var boxAr = [];
+var xAr = [];
+var yAr = [];
+
+function init(){
+    wrapper = document.getElementById("wrapper");
+    createHero();
+    document.body.addEventListener("keydown", function(){
+        pressDown();
+    });
+
+    document.body.addEventListener("keyup", function(){
+        pressUp();
+    });
+}
+
+
+function pressDown(){
+    switch(event.keyCode){
+        case 37: hero.velX = -5; break;
+        case 39: hero.velX = 5; break;
+    }
+}
+
+function pressUp(){
+    switch(event.keyCode){
+        case 37: hero.velX = 0; break;
+        case 39: hero.velX = 0; break;
+    }
+
+}
+
+function createHero(){
+    //src, wrapper 매개변수
+    hero = new Mario("../../image/mario.png", wrapper);
+    for(var i = 0; i < 3; i++){
+        var box = new Box(getRandom(900), (getRandom(3)+50)*10);
+        boxAr.push(box);
+    } 
+}
+
+//두 물체간, 충돌 여부를 판단해주는 함수
+function collisionCheck(obj1, obj2){
+    //왼쪽 상단만 체크
+    var x1 = parseInt(obj1.x);
+    var y1 = parseInt(obj1.y);
+    var w1 = parseInt(obj1.width);
+    var h1 = parseInt(obj1.height);
+
+    var x2 = parseInt(obj2.x);
+    var y2 = parseInt(obj2.y);
+    var w2 = parseInt(obj2.width);
+    var h2 = parseInt(obj2.height);
+
+    if((x1+w1) > x2 && (y1+h1) > y2 && (x1+w1) < (x2+w2) && (y1+h1) < (y2+h2)){
+        obj2.width = 0+"px";
+        console.log("zz");
+    }else if(y1 < (y2+h2) && (x1+w1) > x2 && y1 > y2 && (x1+w1) < (x2+w2)){
+        obj2.width = 0+"px";
+        console.log("zz");
+    }else if(x1 < (x2+w2) && (y1+h1) > y2 && (y1+h1) < (y2+h2) && x1 > x2 ){
+        obj2.width = 0+"px";
+        console.log("zz");
+    }else if(y1 < (y2+h2) && x1 < (x2+w2) && y1 > y2 && x1 > x2){
+        console.log("zz");
+        obj2.width = 0+"px";
+    }
+}
+
+//스페이스바 눌렀을 때 점프 동작
+function space(){
+    if(event.keyCode == 32){
+        hero.marioFlag();
+    }
+}
+
+//마리오 움직임 호출
+function move(){
+    hero.marioJump();
+    hero.tick();
+    hero.render();
+}
+
+window.addEventListener("load", function(){
+    init();
+    setInterval("move()", 1);
+});
+</script>
+</head>
+<body onkeyup="space()">
+    <div id="wrapper">
+
+    </div>
+</body>
+</html>

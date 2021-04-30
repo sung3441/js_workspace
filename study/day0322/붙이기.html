@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<style>
+#wrapper{
+    width: 800px;
+    height: 900px;
+    position: relative;
+}
+
+</style>
+<script src="../../js/lib.js"></script>
+<script src="./붙.js"></script>
+<script>
+var cnt=0;
+var imgAr = ["../../image/h.png", "../../image/card1.png", "../../image/catFace.png"];
+var wrapper;
+function init(){
+    wrapper = document.getElementById("wrapper");
+}
+
+
+function createMonster(){
+
+    var mon = new Monster(wrapper, imgAr[getRandom(imgAr.length)], cnt);
+    cnt+=100;
+}
+
+function space(){
+    if(event.keyCode==32){
+        createMonster();
+    }
+}
+window.addEventListener("load", function(){
+    init();
+});
+</script>
+</head>
+<body onkeydown="space()">
+    <div id="wrapper"></div>
+</body>
+</html>
